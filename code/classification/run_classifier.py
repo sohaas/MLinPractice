@@ -10,7 +10,7 @@ Created on Wed Sep 29 14:23:48 2021
 
 import argparse, pickle
 from sklearn.dummy import DummyClassifier
-from sklearn.metrics import accuracy_score, cohen_kappa_score
+from sklearn.metrics import accuracy_score, cohen_kappa_score, fbeta_score
 
 # setting up CLI
 parser = argparse.ArgumentParser(description = "Classifier")
@@ -22,6 +22,7 @@ parser.add_argument("-m", "--majority", action = "store_true", help = "majority 
 parser.add_argument("-f", "--frequency", action = "store_true", help = "label frequency classifier")
 parser.add_argument("-a", "--accuracy", action = "store_true", help = "evaluate using accuracy")
 parser.add_argument("-k", "--kappa", action = "store_true", help = "evaluate using Cohen's kappa")
+parser.add_argument("-fb", "--fbeta", action = "store_true", help = "evaluate using F-beta score")
 args = parser.parse_args()
 
 # load data
@@ -55,10 +56,16 @@ if args.accuracy:
     evaluation_metrics.append(("accuracy", accuracy_score))
 if args.kappa:
     evaluation_metrics.append(("Cohen's kappa", cohen_kappa_score))
+if args.fbeta:
+    evaluation_metrics.append(("F-beta score", fbeta_score))
 
 # compute and print them
 for metric_name, metric in evaluation_metrics:
-    print("    {0}: {1}".format(metric_name, metric(data["labels"], prediction)))
+    if metric_name == "F-beta score":
+        print("    {0}: {1}".format(metric_name, metric(data["labels"], prediction, beta=1)))
+    else:
+        print("    {0}: {1}".format(metric_name, metric(data["labels"], prediction)))
+    
     
 # export the trained classifier if the user wants us to do so
 if args.export_file is not None:

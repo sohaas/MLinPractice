@@ -126,6 +126,7 @@ By default, this data is used to train a classifier, which is specified by one o
 The classifier is then evaluated, using the evaluation metrics as specified through the following optional arguments:
 - `-a`or `-accuracy`: Classification accurracy (i.e., percentage of correctly classified examples).
 - `-k`or `--kappa`: Cohen's kappa (i.e., adjusting accuracy for probability of random agreement).
+- `-fb`or `--fbeta`: F-beta score (i.e., weighted harmonic mean of precision and recall where the beta parameter determines the weight of recall).
 
 
 Moreover, the script support importing and exporting trained classifiers with the following optional arguments:
