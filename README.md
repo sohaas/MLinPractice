@@ -128,7 +128,7 @@ The classifier is then evaluated, using the evaluation metrics as specified thro
 - `-a`or `-accuracy`: Classification accurracy (i.e., percentage of correctly classified examples).
 - `-k`or `--kappa`: Cohen's kappa (i.e., adjusting accuracy for probability of random agreement).
 - `-fb`or `--fbeta`: F-beta score (i.e., weighted harmonic mean of precision and recall where the beta parameter determines the weight of recall).
-
+- `-se`or `--sensitivity`: Sensitivity´ (i.e., true positive rate.)
 
 Moreover, the script support importing and exporting trained classifiers with the following optional arguments:
 - `-i` or `--import_file`: Load a trained classifier from the given pickle file. Ignore all parameters that configure the classifier to use and don't retrain the classifier.
