@@ -56,7 +56,7 @@ The script `run_preprocessing.py` is used to run various preprocessing steps on 
 ```python -m code.preprocessing.run_preprocessing path/to/input.csv path/to/output.csv```
 Here, `input.csv` is a csv file (ideally the output of `create_labels.py`), while `output.csv` is the csv file where the output will be written.
 The preprocessing steps to take can be configured with the following flags:
-- `-p` or `--punctuation`: A new column "tweet_no_punctuation" is created, where all punctuation is removed from the original tweet. (See `code/preprocessing/punctuation_remover.py` for more details)
+- `-p` or `--punctuation`: A new column is created by removing all punctuation from the given input column (specified by `--punctuation_input`, defaults to `"tweet"`). New column name equals old colum name plus suffix "_no_punctuation".
 - `-t` or `--tokenize`: A new column is created by tokenizing the given input column (specified by `--tokenize_input`, defaults to `"tweet"`). New column name equals old colum name plus suffix "_tokenized".
 
 Moreover, the script accepts the following optional parameters:
