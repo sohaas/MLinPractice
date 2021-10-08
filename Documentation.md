@@ -5,6 +5,12 @@ This file documents the development process of our tweet prediction tool.
 Initial goal: "Predict viral tweets"
 
 # Preprocessing
+Before any of the other preprocessing steps, we decided to remove any 
+unnecessary data to keep it as simple as possible. We did this by first manually 
+checking for columns with a low rate of entries and then (computationally)
+checking for rows with empty tweet entries. BAll columns and rows that we found 
+to be not informative as described above were removed. 
+
 For the preprocessing of our data, we decided to convert the tweets to
 lowercase in addition to the removal of the punctuation and the tokenization.
 
