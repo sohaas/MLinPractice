@@ -16,7 +16,7 @@ from code.preprocessing.lowercaser import Lowercaser
 from code.preprocessing.tokenizer import Tokenizer
 from code.preprocessing.lemmatizer import Lemmatizer
 from code.preprocessing.stemmer import Stemmer
-from code.util import COLUMN_TWEET, COLUMN_TWEET_TOKENS, SUFFIX_NO_PUNCTUATION, SUFFIX_LOWERCASED, SUFFIX_TOKENIZED, SUFFIX_LEMMATIZED, SUFFIX_STEMMED
+from code.util import COLUMN_TWEET, COLUMN_LANGUAGE, COLUMN_TWEET_TOKENS, SUFFIX_NO_PUNCTUATION, SUFFIX_LOWERCASED, SUFFIX_TOKENIZED, SUFFIX_LEMMATIZED, SUFFIX_STEMMED
 
 # setting up CLI
 parser = argparse.ArgumentParser(description = "Various preprocessing steps")
@@ -51,7 +51,7 @@ if args.lemmatize and args.lemmatize_input.endswith(SUFFIX_TOKENIZED):
         preprocessors.append(Lemmatizer(args.lemmatize_input, args.lemmatize_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_LEMMATIZED))
 # only allow "_tokenized" colums to be stemmed
 if args.stem and args.stem_input.endswith(SUFFIX_TOKENIZED):
-        preprocessors.append(Stemmer(args.stem_input, args.stem_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_STEMMED))
+        preprocessors.append(Stemmer([args.stem_input, COLUMN_LANGUAGE], args.stem_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_STEMMED))
 
 # call all preprocessing steps
 for preprocessor in preprocessors:
