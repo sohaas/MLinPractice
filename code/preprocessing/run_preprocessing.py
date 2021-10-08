@@ -15,7 +15,9 @@ from code.preprocessing.punctuation_remover import PunctuationRemover
 from code.preprocessing.lowercaser import Lowercaser
 from code.preprocessing.tokenizer import Tokenizer
 from code.preprocessing.value_handler import ValueHandler
-from code.util import COLUMN_TWEET, SUFFIX_NO_PUNCTUATION, SUFFIX_LOWERCASED, SUFFIX_TOKENIZED
+from code.preprocessing.lemmatizer import Lemmatizer
+from code.preprocessing.stemmer import Stemmer
+from code.util import COLUMN_TWEET, COLUMN_TWEET_TOKENS, SUFFIX_NO_PUNCTUATION, SUFFIX_LOWERCASED, SUFFIX_TOKENIZED, SUFFIX_LEMMATIZED, SUFFIX_STEMMED
 
 # setting up CLI
 parser = argparse.ArgumentParser(description = "Various preprocessing steps")
@@ -29,6 +31,10 @@ parser.add_argument("-t", "--tokenize", action = "store_true", help = "tokenize 
 parser.add_argument("--tokenize_input", help = "input column used for tokenization", default = COLUMN_TWEET)
 parser.add_argument("-ha", "--handle_values", action = "store_true", help = "handle missing and faulty values")
 parser.add_argument("--handle_values_input", help = "input column used for handling values", default = None)
+parser.add_argument("-le", "--lemmatize", action = "store_true", help = "lemmatize given column into root words")
+parser.add_argument("--lemmatize_input", help = "input column used for lemmatization", default = COLUMN_TWEET_TOKENS)
+parser.add_argument("-s", "--stem", action = "store_true", help = "remove stemming of words in given column")
+parser.add_argument("--stem_input", help = "input column used for stemming", default = COLUMN_TWEET_TOKENS)
 parser.add_argument("-e", "--export_file", help = "create a pipeline and export to the given location", default = None)
 args = parser.parse_args()
 
@@ -37,14 +43,20 @@ df = pd.read_csv(args.input_file, quoting = csv.QUOTE_NONNUMERIC, lineterminator
 
 # collect all preprocessors
 preprocessors = []
+if args.handle_values:
+    preprocessors.append(ValueHandler(args.handle_values_input, None))
 if args.punctuation:
     preprocessors.append(PunctuationRemover(args.punctuation_input, args.punctuation_input + SUFFIX_NO_PUNCTUATION))
 if args.lowercase:
     preprocessors.append(Lowercaser(args.lowercase_input, args.lowercase_input + SUFFIX_LOWERCASED))
 if args.tokenize:
     preprocessors.append(Tokenizer(args.tokenize_input, args.tokenize_input + SUFFIX_TOKENIZED))
-if args.handle_values:
-    preprocessors.append(ValueHandler(args.handle_values_input, None))
+# only allow "_tokenized" colums to be lemmatized
+if args.lemmatize and args.lemmatize_input.endswith(SUFFIX_TOKENIZED):
+        preprocessors.append(Lemmatizer(args.lemmatize_input, args.lemmatize_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_LEMMATIZED))
+# only allow "_tokenized" colums to be stemmed
+if args.stem and args.stem_input.endswith(SUFFIX_TOKENIZED):
+        preprocessors.append(Stemmer(args.stem_input, args.stem_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_STEMMED))
 
 # call all preprocessing steps
 for preprocessor in preprocessors:
