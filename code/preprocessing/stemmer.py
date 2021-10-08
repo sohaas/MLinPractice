@@ -22,7 +22,7 @@ class Stemmer(Preprocessor):
     
     # don't need to implement _set_variables(), since no variables to set
     
-    def _get_values(self, inputs):
+    def _get_values(self, inputs, df):
         """Stem the tweet."""
         
         stemmed = []
