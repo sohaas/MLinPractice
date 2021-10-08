@@ -5,7 +5,6 @@ This file documents the development process of our tweet prediction tool.
 Initial goal: "Predict viral tweets"
 
 # Preprocessing
-<<<<<<< HEAD
 Before any of the other preprocessing steps, we decided to remove any 
 unnecessary data to keep it as simple as possible. We did this by first manually 
 checking for columns with a low rate of entries and then (computationally)
@@ -14,9 +13,6 @@ to be not informative as described above were removed.
 
 For the preprocessing of our data, we decided to convert the tweets to
 lowercase in addition to the removal of the punctuation and the tokenization.
-=======
-For the preprocessing of our data, we decided to convert the tweets to lowercase in addition to the removal of the punctuation and the tokenization.
->>>>>>> 00e5d125668fd9ce0880167876f90b7b63413356
 
 We are aware that punctuation and uppercase letters could be used as features to see if tweets containing, e.g. a lot of exclamation marks or "yelled words" are likely to become viral.
 However, we decided to remove them in order to facilitate subsequent content analyses.
