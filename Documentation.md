@@ -16,9 +16,17 @@ analyses. In case this decision might be revoked later, a solution might be
 to simply count their occurences and normalize them with regard to the length
 of the tweet.
 
-In order to simplify the feature extraction further, the tweets were broken
-down into basic building blocks (first into sentences and then single words)
-in the tokenization step.
+In order to enable further preprocessiong steps, like lemmatization, the tweets
+were broken down into basic building blocks, i.e. single words by tokenization.
+
+After tokenizing the tweet, it can be lemmatized, i.e. the inflections can be
+removed and the words mapped to their root from. This step serves to optimize
+the data for the subsequent content analysis. An alternative would have been to
+implement stemming instead of lemmatization, however in stemming, words are
+merely cut and not mapped to their root form. Therefore, e.g. the word "caring"
+becomes "car" with stemming, whereas lemmatization correctly transforms it to
+"care", which is why we decided for lemmatization, though this might be
+computationally more expensive.
 
 # Feature Extraction
 
