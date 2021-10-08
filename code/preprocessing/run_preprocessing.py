@@ -16,7 +16,8 @@ from code.preprocessing.lowercaser import Lowercaser
 from code.preprocessing.tokenizer import Tokenizer
 from code.preprocessing.lemmatizer import Lemmatizer
 from code.preprocessing.stemmer import Stemmer
-from code.util import COLUMN_TWEET, COLUMN_TWEET_TOKENS, SUFFIX_NO_PUNCTUATION, SUFFIX_LOWERCASED, SUFFIX_TOKENIZED, SUFFIX_LEMMATIZED, SUFFIX_STEMMED
+from code.preprocessing.stopworder import Stopworder
+from code.util import COLUMN_TWEET, COLUMN_TWEET_TOKENS, SUFFIX_NO_PUNCTUATION, SUFFIX_LOWERCASED, SUFFIX_TOKENIZED, SUFFIX_LEMMATIZED, SUFFIX_STEMMED, SUFFIX_NO_STOPWORDS
 
 # setting up CLI
 parser = argparse.ArgumentParser(description = "Various preprocessing steps")
@@ -32,6 +33,8 @@ parser.add_argument("-le", "--lemmatize", action = "store_true", help = "lemmati
 parser.add_argument("--lemmatize_input", help = "input column used for lemmatization", default = COLUMN_TWEET_TOKENS)
 parser.add_argument("-s", "--stem", action = "store_true", help = "remove stemming of words in given column")
 parser.add_argument("--stem_input", help = "input column used for stemming", default = COLUMN_TWEET_TOKENS)
+parser.add_argument("-st", "--stopwords", action = "store_true", help = "remove stopwords of words in given column")
+parser.add_argument("--stopwords_input", help = "input column used for removing stopwords", default = COLUMN_TWEET_TOKENS)
 parser.add_argument("-e", "--export_file", help = "create a pipeline and export to the given location", default = None)
 args = parser.parse_args()
 
@@ -52,6 +55,9 @@ if args.lemmatize and args.lemmatize_input.endswith(SUFFIX_TOKENIZED):
 # only allow "_tokenized" colums to be stemmed
 if args.stem and args.stem_input.endswith(SUFFIX_TOKENIZED):
         preprocessors.append(Stemmer(args.stem_input, args.stem_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_STEMMED))
+# only allow stopwords to be removed from "_tokenized" colums
+if args.stopwords and args.stopwords_input.endswith(SUFFIX_TOKENIZED):
+        preprocessors.append(Stopworder(args.stopwords_input, args.stopwords_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_NO_STOPWORDS))
 
 # call all preprocessing steps
 for preprocessor in preprocessors:
