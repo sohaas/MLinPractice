@@ -12,6 +12,7 @@ Created on Wed Sep 29 10:50:36 2021
 COLUMN_TWEET = "tweet"
 COLUMN_LIKES = "likes_count"
 COLUMN_RETWEETS = "retweets_count"
+COLUMN_LANGUAGE = "language"
 
 # columns to be removed
 COLUMNS_REMOVE = ["place", "cashtags", "retweet", "near", "geo", "source",
@@ -27,3 +28,4 @@ SUFFIX_LOWERCASED = "_lowercased"
 SUFFIX_TOKENIZED = "_tokenized"
 SUFFIX_LEMMATIZED = "_lemmatized"
 SUFFIX_STEMMED = "_stemmed"
+SUFFIX_NO_STOPWORDS = "_no_stopwords"

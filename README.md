@@ -62,6 +62,7 @@ The preprocessing steps to take can be configured with the following flags:
 - `-t` or `--tokenize`: A new column is created by tokenizing the given input column (specified by `--tokenize_input`, defaults to `"tweet"`). New column name equals old colum name plus suffix "_tokenized".
 - `-le` or `--lemmatize`: A new column is created by lemmatizing the given input column (specified by `--lemmatize_input`, may only be "_tokenized" columns and defaults to `"tweet_tokenized"`). New column name equals old colum name where suffix "_tokenized" is replaced with "_lemmatized".
 - `-s` or `--stem`: A new column is created by stemming the given input column (specified by `--stem_input`, may only be "_tokenized" columns and defaults to `"tweet_tokenized"`). New column name equals old colum name where suffix "_tokenized" is replaced with "_stemmed".
+- `-st` or `--stopwords`: A new column is created by removing all stopwords from the given input column (specified by `--stopwords_input`, may only be "_tokenized" columns and defaults to `"tweet_tokenized"`). New column name equals old colum name where suffix "_tokenized" is replaced with "_no_stopwords".
 
 Moreover, the script accepts the following optional parameters:
 - `-e` or `--export` gives the path to a pickle file where an sklearn pipeline of the different preprocessing steps will be stored for later usage.
