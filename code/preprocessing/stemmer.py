@@ -38,5 +38,44 @@ class Stemmer(Preprocessor):
             stemmed.append(str(stemmed_tweet))
         
         return stemmed
+
+"""
+    def get_stemmer(language):
+        #Return snowball stemmer in the right language.
+        
+        if language == "ar":
+            return SnowballStemmer("arabic")
+        elif language == "da":
+            return SnowballStemmer("danish")
+        elif language == "du":
+            return SnowballStemmer("dutch")
+        elif language == "en":
+            return SnowballStemmer("english")
+        elif language == "fi":
+            return SnowballStemmer("finnish")
+        elif language == "fr":
+            return SnowballStemmer("french")
+        elif language == "ge":
+            return SnowballStemmer("german")
+        elif language == "hu":
+            return SnowballStemmer("hungarian")
+        elif language == "it":
+            return SnowballStemmer("italian")
+        elif language == "no":
+            return SnowballStemmer("norwegian")
+        elif language == "po":
+            return SnowballStemmer("portuguese")
+        elif language == "ro":
+            return SnowballStemmer("romanian")
+        elif language == "ru":
+            return SnowballStemmer("russian")
+        elif language == "sp":
+            return SnowballStemmer("spanish")
+        elif language == "sw":
+            return SnowballStemmer("swedish")
+        else:
+            return
+"""
+
 # -*- coding: utf-8 -*-
 

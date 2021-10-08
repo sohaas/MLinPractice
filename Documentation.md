@@ -12,6 +12,7 @@ However, we decided to remove them in order to facilitate subsequent content ana
 In case this decision might be revoked later, a solution might be to simply count their occurences and normalize them with regard to the length of the tweet.
 
 In order to enable further preprocessiong steps, like lemmatization, the tweets were broken down into basic building blocks, i.e. single words by tokenization.
+Above that, for the same reason, the preprocessing step of removing the stopwords (like is, a, they) was implemented.
 
 First, our idea was to lemmatize the tweet after tokenizing it to optimize the data for the subsequent content analysis.
 The reason why we initially chose the approach of lemmatization over stemming was that in stemming, words are merely cut and not mapped to a meaningful base form like in lemmatization. 

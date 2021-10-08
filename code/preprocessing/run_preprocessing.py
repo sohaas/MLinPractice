@@ -17,7 +17,7 @@ from code.preprocessing.tokenizer import Tokenizer
 from code.preprocessing.lemmatizer import Lemmatizer
 from code.preprocessing.stemmer import Stemmer
 from code.preprocessing.stopworder import Stopworder
-from code.util import COLUMN_TWEET, COLUMN_TWEET_TOKENS, SUFFIX_NO_PUNCTUATION, SUFFIX_LOWERCASED, SUFFIX_TOKENIZED, SUFFIX_LEMMATIZED, SUFFIX_STEMMED, SUFFIX_NO_STOPWORDS
+from code.util import COLUMN_TWEET, COLUMN_LANGUAGE, COLUMN_TWEET_TOKENS, SUFFIX_NO_PUNCTUATION, SUFFIX_LOWERCASED, SUFFIX_TOKENIZED, SUFFIX_LEMMATIZED, SUFFIX_STEMMED, SUFFIX_NO_STOPWORDS
 
 # setting up CLI
 parser = argparse.ArgumentParser(description = "Various preprocessing steps")
@@ -57,7 +57,7 @@ if args.stem and args.stem_input.endswith(SUFFIX_TOKENIZED):
         preprocessors.append(Stemmer(args.stem_input, args.stem_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_STEMMED))
 # only allow stopwords to be removed from "_tokenized" colums
 if args.stopwords and args.stopwords_input.endswith(SUFFIX_TOKENIZED):
-        preprocessors.append(Stopworder(args.stopwords_input, args.stopwords_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_NO_STOPWORDS))
+        preprocessors.append(Stopworder([args.stopwords_input, COLUMN_LANGUAGE], args.stopwords_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_NO_STOPWORDS))
 
 # call all preprocessing steps
 for preprocessor in preprocessors:
