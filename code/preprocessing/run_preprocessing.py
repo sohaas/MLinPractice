@@ -14,6 +14,7 @@ from sklearn.pipeline import make_pipeline
 from code.preprocessing.punctuation_remover import PunctuationRemover
 from code.preprocessing.lowercaser import Lowercaser
 from code.preprocessing.tokenizer import Tokenizer
+from code.preprocessing.value_handler import ValueHandler
 from code.util import COLUMN_TWEET, SUFFIX_NO_PUNCTUATION, SUFFIX_LOWERCASED, SUFFIX_TOKENIZED
 
 # setting up CLI
@@ -26,6 +27,8 @@ parser.add_argument("-l", "--lowercase", action = "store_true", help = "convert 
 parser.add_argument("--lowercase_input", help = "input column used for lowercasing", default = COLUMN_TWEET)
 parser.add_argument("-t", "--tokenize", action = "store_true", help = "tokenize given column into individual words")
 parser.add_argument("--tokenize_input", help = "input column used for tokenization", default = COLUMN_TWEET)
+parser.add_argument("-ha", "--handle_values", action = "store_true", help = "handle missing and faulty values")
+parser.add_argument("--handle_values_input", help = "input column used for handling values", default = None)
 parser.add_argument("-e", "--export_file", help = "create a pipeline and export to the given location", default = None)
 args = parser.parse_args()
 
@@ -40,6 +43,8 @@ if args.lowercase:
     preprocessors.append(Lowercaser(args.lowercase_input, args.lowercase_input + SUFFIX_LOWERCASED))
 if args.tokenize:
     preprocessors.append(Tokenizer(args.tokenize_input, args.tokenize_input + SUFFIX_TOKENIZED))
+if args.handle_values:
+    preprocessors.append(ValueHandler(args.handle_values_input, None))
 
 # call all preprocessing steps
 for preprocessor in preprocessors:

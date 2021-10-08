@@ -9,6 +9,7 @@ Created on Tue Sep 28 17:06:35 2021
 """
 
 from sklearn.base import BaseEstimator, TransformerMixin
+import pandas as pd
 
 # inherits from BaseEstimator (as pretty much everything in sklearn)
 #   and TransformerMixin (allowing for fit, transform, and fit_transform methods)
@@ -32,7 +33,8 @@ class Preprocessor(BaseEstimator,TransformerMixin):
         inputs = []
         # collect all input columns from df
         for input_col in self._input_columns:
-            inputs.append(df[input_col])
+            if input_col != None:
+                inputs.append(df[input_col])
         
         # call _set_variables (to be implemented by subclass)
         self._set_variables(inputs)
@@ -41,7 +43,7 @@ class Preprocessor(BaseEstimator,TransformerMixin):
     
     # get preprocessed column based on the inputs from the DataFrame and internal variables
     # to be implemented by subclass!
-    def _get_values(self, inputs):
+    def _get_values(self, inputs, df):
         pass
         
     # transform function: transforms pandas DataFrame based on any internal variables
@@ -49,10 +51,17 @@ class Preprocessor(BaseEstimator,TransformerMixin):
         
         inputs = []
         # collect all input columns from df
-        for input_col in self._input_columns:
-            inputs.append(df[input_col])
+        if self._input_columns[0] is not None:
+            for input_col in self._input_columns:
+                inputs.append(df[input_col])
         
         # add to copy of DataFrame
         df_copy = df.copy()
-        df_copy[self._output_column] = self._get_values(inputs)   
+        output_prepro = self._get_values(inputs, df)
+        
+        if isinstance(output_prepro, pd.DataFrame):
+            df_copy = output_prepro
+        else:
+            df_copy[self._output_column] = output_prepro 
+            
         return df_copy

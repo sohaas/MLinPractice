@@ -20,7 +20,7 @@ class Lowercaser(Preprocessor):
     
     # don't need to implement _set_variables()
     
-    def _get_values(self, inputs):
+    def _get_values(self, inputs, df):
         """Lowercase the tweet."""
         lowercased = []
         

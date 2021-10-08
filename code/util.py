@@ -13,6 +13,11 @@ COLUMN_TWEET = "tweet"
 COLUMN_LIKES = "likes_count"
 COLUMN_RETWEETS = "retweets_count"
 
+# columns to be removed
+COLUMNS_REMOVE = ["place", "cashtags", "retweet", "near", "geo", "source",
+                  "user_rt_id", "user_rt", "retweet_id", "retweet_date", 
+                  "translate", "trans_src", "trans_dest"]
+
 # column names of novel columns for preprocessing
 COLUMN_LABEL = "label"
 
