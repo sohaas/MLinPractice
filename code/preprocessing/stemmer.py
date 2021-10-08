@@ -18,7 +18,7 @@ class Stemmer(Preprocessor):
     
     def __init__(self, input_column, output_column):
         """Initialize the Stemmer with the given input and output column."""
-        super().__init__([input_column], output_column)
+        super().__init__(input_column, output_column)
     
     # don't need to implement _set_variables(), since no variables to set
     
@@ -26,28 +26,32 @@ class Stemmer(Preprocessor):
         """Stem the tweet."""
         
         stemmed = []
-        stemmer = SnowballStemmer("english")
         
         for index, value in inputs[0].items():
             tokenized_list = ast.literal_eval(value)
             stemmed_tweet = []
+            
+            stemmer = self.get_stemmer(inputs[1][index])
+            
             for word in tokenized_list:
-                stemmed_word = stemmer.stem(word)
-                stemmed_tweet.append(stemmed_word)
+                if stemmer is not None:
+                    stemmed_word = stemmer.stem(word)
+                    stemmed_tweet.append(stemmed_word)
+                else:
+                    stemmed_tweet.append(word)
                 
             stemmed.append(str(stemmed_tweet))
         
         return stemmed
 
-"""
-    def get_stemmer(language):
-        #Return snowball stemmer in the right language.
+    def get_stemmer(self, language):
+        """Return list of stopwords in the right language."""
         
         if language == "ar":
             return SnowballStemmer("arabic")
         elif language == "da":
             return SnowballStemmer("danish")
-        elif language == "du":
+        elif language == "nl":
             return SnowballStemmer("dutch")
         elif language == "en":
             return SnowballStemmer("english")
@@ -55,7 +59,7 @@ class Stemmer(Preprocessor):
             return SnowballStemmer("finnish")
         elif language == "fr":
             return SnowballStemmer("french")
-        elif language == "ge":
+        elif language == "de":
             return SnowballStemmer("german")
         elif language == "hu":
             return SnowballStemmer("hungarian")
@@ -63,19 +67,18 @@ class Stemmer(Preprocessor):
             return SnowballStemmer("italian")
         elif language == "no":
             return SnowballStemmer("norwegian")
-        elif language == "po":
+        elif language == "pt":
             return SnowballStemmer("portuguese")
         elif language == "ro":
             return SnowballStemmer("romanian")
         elif language == "ru":
             return SnowballStemmer("russian")
-        elif language == "sp":
+        elif language == "es":
             return SnowballStemmer("spanish")
-        elif language == "sw":
+        elif language == "sv":
             return SnowballStemmer("swedish")
         else:
-            return
-"""
+            return None
 
 # -*- coding: utf-8 -*-
 

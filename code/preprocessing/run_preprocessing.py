@@ -59,7 +59,7 @@ if args.lemmatize and args.lemmatize_input.endswith(SUFFIX_TOKENIZED):
         preprocessors.append(Lemmatizer(args.lemmatize_input, args.lemmatize_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_LEMMATIZED))
 # only allow "_tokenized" colums to be stemmed
 if args.stem and args.stem_input.endswith(SUFFIX_TOKENIZED):
-        preprocessors.append(Stemmer(args.stem_input, args.stem_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_STEMMED))
+        preprocessors.append(Stemmer([args.stem_input, COLUMN_LANGUAGE], args.stem_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_STEMMED))
 # only allow stopwords to be removed from "_tokenized" colums
 if args.stopwords and args.stopwords_input.endswith(SUFFIX_TOKENIZED):
         preprocessors.append(Stopworder([args.stopwords_input, COLUMN_LANGUAGE], args.stopwords_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_NO_STOPWORDS))
