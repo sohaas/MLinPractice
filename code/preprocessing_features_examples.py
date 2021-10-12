@@ -13,6 +13,7 @@ import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
+import numpy as np
 
 # stemming
 stemmer = nltk.stem.snowball.SnowballStemmer("english")
@@ -32,14 +33,17 @@ for i in range(10):
     print(frequency_list[i])
 
 # tf-idf
-df = pd.read_csv("data/preprocessing/preprocessed.csv", quoting = csv.QUOTE_NONNUMERIC, lineterminator = "\n")
+df = pd.read_csv("data/preprocessing/labeled.csv", quoting = csv.QUOTE_NONNUMERIC, lineterminator = "\n")
 tweets = df["tweet"][:100]
 
 vectorizer = TfidfVectorizer()
 tf_idf_vectors = vectorizer.fit_transform(tweets).todense()
-print(tf_idf_vectors.shape)
-print(vectorizer.get_feature_names()[142:145])
-print(tf_idf_vectors[66:71, 142:145])
+
+vector = tf_idf_vectors[0]
+idx_highest = np.argmax(vector)
+
+print(vectorizer.get_feature_names()[idx_highest])
+print(tf_idf_vectors[0, idx_highest])
 
 tf_idf_similarities = cosine_similarity(tf_idf_vectors)
 print(tf_idf_similarities[:5, :5])
