@@ -94,6 +94,7 @@ The features to be extracted can be configured with the following optional param
 - `-c` or `--char_length`: Count the number of characters in the "tweet" column of the data frame. (see code/feature_extraction/character_length.py)
 - `-s` or `--sentiment`: Analyze the sentiment of the "tweet" column of the data frame. (see code/feature_extraction/sentiment_analyzer.py)
 - `-l` or `--language`: Check whether the language of the tweet is English ("en" in "language" column). (see code/feature_extraction/language_en.py)
+- `-u` or `--url`: Check whether the tweet contains any URLs ("urls" column not empty). (see code/feature_extraction/url_included.py)
 
 Moreover, the script support importing and exporting fitted feature extractors with the following optional arguments:
 - `-i` or `--import_file`: Load a configured and fitted feature extraction from the given pickle file. Ignore all parameters that configure the features to extract.

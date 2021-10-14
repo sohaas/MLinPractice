@@ -153,6 +153,16 @@ differentiate between English and non-English tweets and test for a correlation
 with the virality. The tweets were categorized using boolean values, i.e. 0 =
 non-English and 1 = English.
 
+Additionally, we included a feature extractor for checking if the inclusion of
+urls in the tweets has any incluence on the virality. For this purpose, the
+"urls" column was used to categorize the tweets, again with the help of boolean
+values, i.e. 0 = no url included and 1 = url included. We chose this as a
+feature, because when looking at the data we noticed that quite often, tweets
+contained links as invitations to events, or job oppertunities, or just some
+interesting webpage. But the point is that this way, a lot more information can
+be transferred than in a tweet without any urls and with a character limit,
+which might make the tweet more interesting and therefore more viral.
+
 ### Results
 
 Can you say something about how the feature values are distributed? Maybe show
