@@ -120,20 +120,34 @@ Maybe show a short example what your preprocessing does.
 
 ### Interpretation
 
-Probably, no real interpretation possible, so feel free to leave this section out.
+Probably, no real interpretation possible, so feel free to leave this section
+out.
 
 ## Feature Extraction
 
-Again, either structure among decision-result-interpretation or based on feature,
-up to you.
+Again, either structure among decision-result-interpretation or based on
+feature, up to you.
 
 ### Design Decisions
 
-Which features did you implement? What's their motivation and how are they computed?
+Which features did you implement? What's their motivation and how are they
+computed?
+
+In order to check for correlations regarding the sentiment of a tweet and its
+virality, we decided to categorize them into the three categories "positive",
+"neutral" and "negative". To facilitate the further handling of these values,
+we mapped them to binary numbers ("negative"=00, "neutral"=01, "positive"=10).
+For the categorization, we used the compound score of the
+SentimentIntensityAnalyzer's polarity_scores function. According to
+https://github.com/cjhutto/vaderSentiment#about-the-scoring :
+- positive sentiment: compound score >= 0.05
+- neutral sentiment: (compound score > -0.05) and (compound score < 0.05)
+- negative sentiment: compound score <= -0.05
 
 ### Results
 
-Can you say something about how the feature values are distributed? Maybe show some plots?
+Can you say something about how the feature values are distributed? Maybe show
+some plots?
 
 ### Interpretation
 
