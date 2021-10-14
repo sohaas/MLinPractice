@@ -146,6 +146,13 @@ https://github.com/cjhutto/vaderSentiment#about-the-scoring :
 We decided against using the compound score as it is and categorizing the data
 instead to ensure a better comparibility.
 
+Since it might very well be possible that English tweets are more likely to
+become viral, due to the amount of people that speak the language, we
+chose this as a feature as well. So, we used the "language" column to
+differentiate between English and non-English tweets and test for a correlation
+with the virality. The tweets were categorized using boolean values, i.e. 0 =
+non-English and 1 = English.
+
 ### Results
 
 Can you say something about how the feature values are distributed? Maybe show
