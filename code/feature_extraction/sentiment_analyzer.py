@@ -43,5 +43,4 @@ class SentimentAnalyzer(FeatureExtractor):
         encoder = OneHotEncoder(sparse = False)
         encoder.fit(features)
         
-        print(encoder.transform(features))
         return encoder.transform(features)
