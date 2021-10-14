@@ -136,7 +136,7 @@ computed?
 In order to check for correlations regarding the sentiment of a tweet and its
 virality, we decided to categorize them into the three categories "positive",
 "neutral" and "negative". To facilitate the further handling of these values,
-we mapped them to binary numbers ("negative"=00, "neutral"=01, "positive"=10).
+we applied one hot encoding to map these strings to binary numbers.
 For the categorization, we used the compound score of the
 SentimentIntensityAnalyzer's polarity_scores function. According to
 https://github.com/cjhutto/vaderSentiment#about-the-scoring :

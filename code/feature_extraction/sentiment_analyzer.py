@@ -9,6 +9,7 @@ Created on Thu Sep 14 10:40:13 2021
 """
 
 import numpy as np
+from sklearn.preprocessing import OneHotEncoder
 from code.feature_extraction.feature_extractor import FeatureExtractor
 from nltk.sentiment import SentimentIntensityAnalyzer
 
@@ -27,19 +28,20 @@ class SentimentAnalyzer(FeatureExtractor):
         sia = SentimentIntensityAnalyzer()
         sentiment = []
         
-        negative = bin(0)
-        neutral = bin(1)
-        positive = bin(2)
-        
         for tweet in inputs[0]: 
             compoundScore = sia.polarity_scores(tweet)["compound"]
             if compoundScore <= -0.05:
-                sentiment.append(negative)
+                sentiment.append("negative")
             elif compoundScore >= 0.05: 
-                sentiment.append(positive)
+                sentiment.append("positive")
             else:          
-                sentiment.append(neutral)
+                sentiment.append("neutral")
         
-        result = np.array(sentiment)
-        result = result.reshape(-1,1)
-        return result
+        # one hot encoding
+        features = np.array(sentiment) 
+        features = features.reshape(-1,1)
+        encoder = OneHotEncoder(sparse = False)
+        encoder.fit(features)
+        
+        print(encoder.transform(features))
+        return encoder.transform(features)
