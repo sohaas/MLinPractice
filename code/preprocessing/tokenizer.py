@@ -23,6 +23,7 @@ class Tokenizer(Preprocessor):
     def _get_values(self, inputs, df):
         """Tokenize the tweet."""
         
+        print("Tokenizing")
         tokenized = []
         
         for tweet in inputs[0]:

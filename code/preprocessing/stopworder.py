@@ -25,6 +25,7 @@ class Stopworder(Preprocessor):
     def _get_values(self, inputs, df):
         """Remove stopwords."""
         
+        print("Removing stopwords")
         no_stopwords = []
         
         for index, value in inputs[0].items():
