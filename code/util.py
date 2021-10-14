@@ -13,6 +13,7 @@ COLUMN_TWEET = "tweet"
 COLUMN_LIKES = "likes_count"
 COLUMN_RETWEETS = "retweets_count"
 COLUMN_LANGUAGE = "language"
+COLUMN_NO_STOP = "tweet_no_stopwords"
 
 # columns to be removed
 COLUMNS_REMOVE = ["place", "cashtags", "retweet", "near", "geo", "source",
