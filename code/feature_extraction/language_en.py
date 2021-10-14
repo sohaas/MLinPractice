@@ -16,7 +16,7 @@ class EnglishLanguage(FeatureExtractor):
     
     # constructor
     def __init__(self, input_column):
-        super().__init__([input_column], "{0}_english".format(input_column))
+        super().__init__([input_column], "{0}_isEnglish".format(input_column))
     
     # don't need to fit, so don't overwrite _set_variables()
     
