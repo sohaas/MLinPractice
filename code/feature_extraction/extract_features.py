@@ -45,9 +45,6 @@ else:    # need to create FeatureCollector manually
     if args.tfidf:
         # topics derived from tfidf score
         features.append(Topics([COLUMN_NO_STOP, COLUMN_LABEL]))
-        """topic_features = Topics([COLUMN_TWEET, COLUMN_LABEL])
-        for feature in topic_features:
-            features.append(feature)"""
     
     # create overall FeatureCollector
     feature_collector = FeatureCollector(features)

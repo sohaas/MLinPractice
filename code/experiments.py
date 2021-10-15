@@ -21,7 +21,7 @@ from nltk.corpus import wordnet
 # more difficult option: group keywords into topics if possible; extend by 
 # synonyms and similar words with the help of wordnet
 
-df = pd.read_csv("data/preprocessing/split/training.csv", quoting = csv.QUOTE_NONNUMERIC, lineterminator = "\n")
+"""df = pd.read_csv("data/preprocessing/split/training.csv", quoting = csv.QUOTE_NONNUMERIC, lineterminator = "\n")
 df = df[:15000]
 tweets = df["tweet"]
 
@@ -54,6 +54,10 @@ for i in range(0, len(words)):
             for synonym in synonyms:
                 if not synonym in topic:
                     topic.append(synonym)
-        keywords.append(topic)
+        keywords.append(topic)"""
         
-print(keywords)
+# print(keywords)
+
+a = np.array([[1,2,3], [4,5,6]])
+for column in a.T:
+   print(column)

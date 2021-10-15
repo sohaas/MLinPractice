@@ -7,6 +7,7 @@ Created on Thu Oct 14 10:39:10 2021
 """
 
 import numpy as np
+import ast
 from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import Counter
 from nltk.corpus import wordnet
@@ -24,35 +25,30 @@ class Topics(FeatureExtractor):
     # compute the word length based on the inputs
     def _get_values(self, inputs):
         
-        tweets = inputs[0][:500]
-        labels = inputs[1][:500]
+        tweets_lim = inputs[0][:10]
+        tweets = inputs[0]
+        labels = inputs[1]
 
-        # do tfidf for all tweets instead of only the viral ones, so those that are 
-        # common for the viral ones dont lose weight and are filtered out
+        # get tf_idf vectors
         vectorizer = TfidfVectorizer(lowercase=False)
-        tf_idf_vectors = vectorizer.fit_transform(tweets).todense()
-        freq_words = []
+        tf_idf_vectors = vectorizer.fit_transform(tweets_lim).todense()
 
-        for i in range(0,len(tweets)): 
-            vector = tf_idf_vectors[i]
-            idx_highest = np.argmax(vector)
+        # store words with highest scores
+        freq_words = []
+        for i in range(0,len(tweets_lim)): 
             if labels[i] == True:
+                idx_highest = np.argmax(tf_idf_vectors[i])
                 freq_words.append(vectorizer.get_feature_names()[idx_highest]) 
-            
+           
+        # get keywords and their synonyms
         counts = Counter(freq_words)
         words = list(counts.keys())
         frequency = list(counts.values())
-
-        # mit komplettem training dataset ausprobieren wie hoch die Schwelle für die 
-        # frequency sein sollte
         topics = []
-        keywords = []
         for i in range(0, len(words)):
             if frequency[i] >= 3:
-                keyword = words[i]
-                synsets = wordnet.synsets(keyword)
-                topic = [keyword]
-                keywords.append(keyword)
+                topic = [words[i]]
+                synsets = wordnet.synsets(words[i])
                 for syn in synsets:
                     synonyms = [str(lemma.name()) for lemma in syn.lemmas()]
                     for synonym in synonyms:
@@ -60,12 +56,18 @@ class Topics(FeatureExtractor):
                             topic.append(synonym)
                 topics.append(topic)
                 
-        features = np.full((len(tweets), len(topics)), False, dtype=bool)
+        features = np.zeros((len(tweets), len(topics)))
         for i in range(0, len(tweets)):
+            tweet = tweets[i]
+            tweet_list = ast.literal_eval(tweets[i])
             for j in range(0, len(topics)):
-                if any(x in tweets[i] for x in topics[j]):
-                    features[i,j] = True
-
-        result = np.array(tweets.str.len())
-        result = result.reshape(-1,1)
-        return result
+                if any(x in tweet for x in topics[j]):
+                    features[i,j] = 1
+                    # print("topics: ", topics[j])
+                    # print("tweet: ", tweets[i])
+        
+        features_list = []
+        for column in features.T:
+            features_list.append(column.reshape(-1,1))
+            
+        return features_list
