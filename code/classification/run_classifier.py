@@ -14,6 +14,7 @@ from sklearn.metrics import accuracy_score, cohen_kappa_score, fbeta_score, clas
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
+from sklearn import svm
 from sklearn.pipeline import make_pipeline
 from mlflow import log_metric, log_param, set_tracking_uri
 
@@ -27,6 +28,7 @@ parser.add_argument("-m", "--majority", action = "store_true", help = "majority 
 parser.add_argument("-f", "--frequency", action = "store_true", help = "label frequency classifier")
 parser.add_argument("-b", "--bayes", action = "store_true", help = "gaussian naive bayes classifier")
 parser.add_argument("--knn", type = int, help = "k nearest neighbor classifier with the specified value of k", default = None)
+parser.add_argument("--svm", type = str, help = "support vector machine classifier", default = None)
 parser.add_argument("-a", "--accuracy", action = "store_true", help = "evaluate using accuracy")
 parser.add_argument("-k", "--kappa", action = "store_true", help = "evaluate using Cohen's kappa")
 parser.add_argument("-fb", "--fbeta", action = "store_true", help = "evaluate using F-beta score")
@@ -75,7 +77,7 @@ else:   # manually set up a classifier
         standardizer = StandardScaler()
         bayes_classifier = GaussianNB()
         classifier = make_pipeline(standardizer, bayes_classifier)
-        
+    
     elif args.knn is not None:
         # k-nearest neighbor classifier
         print("    {0} nearest neighbor classifier".format(args.knn))
@@ -83,8 +85,18 @@ else:   # manually set up a classifier
         log_param("k", args.knn)
         params = {"classifier": "knn", "k": args.knn}
         standardizer = StandardScaler()
-        knn_classifier = KNeighborsClassifier(args.knn, n_jobs = -1)
+        knn_classifier = KNeighborsClassifier(n_neighbors=args.knn, n_jobs = -1)
         classifier = make_pipeline(standardizer, knn_classifier)
+        
+    elif args.svm == "linear" or "polynomial" or "rbf" or "sigmoid":
+        # support vector machine classifier
+        print("    support vector machine classifier with {0} kernel".format(args.svm))
+        log_param("classifier", "svm")
+        log_param("kernel", args.svm)
+        params = {"classifier": "svm", "kernel": args.svm}
+        standardizer = StandardScaler()
+        svm_classifier = svm.SVC(kernel=args.svm)
+        classifier = make_pipeline(standardizer, svm_classifier)
     
     classifier.fit(data["features"], data["labels"].ravel())
     log_param("dataset", "training")
