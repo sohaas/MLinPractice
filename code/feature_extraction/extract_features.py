@@ -12,7 +12,6 @@ import argparse, csv, pickle
 import pandas as pd
 import numpy as np
 from code.feature_extraction.character_length import CharacterLength
-from code.feature_extraction.topics import Topics
 from code.feature_extraction.feature_collector import FeatureCollector
 from code.util import COLUMN_TWEET, COLUMN_LABEL, COLUMN_NO_STOP
 
@@ -24,7 +23,6 @@ parser.add_argument("output_file", help = "path to the output pickle file")
 parser.add_argument("-e", "--export_file", help = "create a pipeline and export to the given location", default = None)
 parser.add_argument("-i", "--import_file", help = "import an existing pipeline from the given location", default = None)
 parser.add_argument("-c", "--char_length", action = "store_true", help = "compute the number of characters in the tweet")
-parser.add_argument("-t", "--tfidf", action = "store_true", help = "extract topics with tfidf and wordnet")
 args = parser.parse_args()
 
 # load data
@@ -42,9 +40,6 @@ else:    # need to create FeatureCollector manually
     if args.char_length:
         # character length of original tweet (without any changes)
         features.append(CharacterLength([COLUMN_TWEET, COLUMN_LABEL]))
-    if args.tfidf:
-        # topics derived from tfidf score
-        features.append(Topics([COLUMN_NO_STOP, COLUMN_LABEL]))
     
     # create overall FeatureCollector
     feature_collector = FeatureCollector(features)

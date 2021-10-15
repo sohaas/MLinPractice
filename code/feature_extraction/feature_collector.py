@@ -44,11 +44,7 @@ class FeatureCollector(FeatureExtractor):
         all_feature_values = []
         
         for feature in self._features:
-            feature_values = feature.transform(df)
-            if isinstance(feature_values, list):
-                all_feature_values += feature_values
-            else:
-                all_feature_values.append(feature_values)
+            all_feature_values.append(feature.transform(df))
         
         result = np.concatenate(all_feature_values, axis = 1)
         return result

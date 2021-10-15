@@ -57,11 +57,13 @@ class Preprocessor(BaseEstimator,TransformerMixin):
         
         # add to copy of DataFrame
         df_copy = df.copy()
-        output_prepro = self._get_values(inputs, df)
-        
-        if isinstance(output_prepro, pd.DataFrame):
-            df_copy = output_prepro
+        output = self._get_values(inputs, df)
+        if isinstance(output, pd.DataFrame):
+            df_copy = output
+        elif isinstance(self._output_column, list):
+            for i in range(0, len(self._output_column)):
+                df_copy[self._output_column[i]] = output[i]
         else:
-            df_copy[self._output_column] = output_prepro 
+            df_copy[self._output_column] = output
             
         return df_copy

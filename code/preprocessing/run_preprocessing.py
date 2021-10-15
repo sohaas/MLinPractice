@@ -18,8 +18,9 @@ from code.preprocessing.value_handler import ValueHandler
 from code.preprocessing.lemmatizer import Lemmatizer
 from code.preprocessing.stemmer import Stemmer
 from code.preprocessing.stopworder import Stopworder
+from code.preprocessing.topic_extractor import TopicExtractor
 from code.util import (COLUMN_TWEET, COLUMN_LANGUAGE, COLUMN_TWEET_TOKENS, 
-COLUMN_NO_PUNCT, COLUMN_LOWERCASE, COLUMN_NO_STOP, SUFFIX_NO_PUNCTUATION, 
+COLUMN_NO_PUNCT, COLUMN_LOWERCASE, COLUMN_NO_STOP, COLUMN_LABEL, SUFFIX_NO_PUNCTUATION, 
 SUFFIX_LOWERCASED, SUFFIX_TOKENIZED, SUFFIX_LEMMATIZED, SUFFIX_STEMMED, SUFFIX_NO_STOPWORDS)
 
 # setting up CLI
@@ -40,7 +41,8 @@ parser.add_argument("-s", "--stem", action = "store_true", help = "remove stemmi
 parser.add_argument("--stem_input", help = "input column used for stemming", default = COLUMN_NO_STOP)
 parser.add_argument("-le", "--lemmatize", action = "store_true", help = "lemmatize given column into root words")
 parser.add_argument("--lemmatize_input", help = "input column used for lemmatization", default = COLUMN_TWEET_TOKENS)
-
+parser.add_argument("-ex", "--extract", action = "store_true", help = "extract topics from given column")
+parser.add_argument("--extract_input", help = "input column used for topic extraction", default = COLUMN_NO_STOP)
 parser.add_argument("-e", "--export_file", help = "create a pipeline and export to the given location", default = None)
 args = parser.parse_args()
 
@@ -67,6 +69,8 @@ if args.lemmatize and args.lemmatize_input.endswith(SUFFIX_TOKENIZED):
 # only allow "_tokenized" colums to be stemmed
 if args.stem and args.stem_input.endswith(SUFFIX_NO_STOPWORDS):
         preprocessors.append(Stemmer([args.stem_input, COLUMN_LANGUAGE], "tweet_stemmed"))
+if args.extract:
+    preprocessors.append(TopicExtractor([args.extract_input, COLUMN_LABEL], None))
 
 
 
