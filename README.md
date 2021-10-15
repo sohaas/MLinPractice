@@ -133,8 +133,9 @@ By default, this data is used to train a classifier, which is specified by one o
 - `-m` or `--majority`: Majority vote classifier that always predicts the majority class.
 - `-f` or `--frequency`: Dummy classifier that makes predictions based on the label frequency in the training data.
 - `-b` or `--bayes`: Gaussian naive bayes classifier that makes predictions based on the bayes theorem.
-- `--svm` and str: Support vector machine classifier that makes predictions based on (str) input kernel.
 - `--knn` and int: K-nearest neighbor classifier that makes predictions based on the k (int input value) closest training data points.
+- `--rf` and int: Random forest classifier that makes predictions based on (int) input decision tree number.
+- `--svm` and str: Support vector machine classifier that makes predictions based on (str) input kernel.
 
 The classifier is then evaluated, using the evaluation metrics as specified through the following optional arguments:
 - `-a`or `--accuracy`: Classification accurracy (i.e., percentage of correctly classified examples).
