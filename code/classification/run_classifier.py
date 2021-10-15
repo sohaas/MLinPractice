@@ -13,6 +13,7 @@ from sklearn.dummy import DummyClassifier
 from sklearn.metrics import accuracy_score, cohen_kappa_score, fbeta_score, classification_report
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
 from sklearn.pipeline import make_pipeline
 from mlflow import log_metric, log_param, set_tracking_uri
 
@@ -24,6 +25,7 @@ parser.add_argument("-e", "--export_file", help = "export the trained classifier
 parser.add_argument("-i", "--import_file", help = "import a trained classifier from the given location", default = None)
 parser.add_argument("-m", "--majority", action = "store_true", help = "majority class classifier")
 parser.add_argument("-f", "--frequency", action = "store_true", help = "label frequency classifier")
+parser.add_argument("-b", "--bayes", action = "store_true", help = "gaussian naive bayes classifier")
 parser.add_argument("--knn", type = int, help = "k nearest neighbor classifier with the specified value of k", default = None)
 parser.add_argument("-a", "--accuracy", action = "store_true", help = "evaluate using accuracy")
 parser.add_argument("-k", "--kappa", action = "store_true", help = "evaluate using Cohen's kappa")
@@ -65,8 +67,17 @@ else:   # manually set up a classifier
         params = {"classifier": "frequency"}
         classifier = DummyClassifier(strategy = "stratified", random_state = args.seed)
         
-    
+    elif args.bayes:
+        # gaussian naive bayes classifier
+        print("    gaussian naive bayes classifier")
+        log_param("classifier", "bayes")
+        params = {"classifier": "bayes"}
+        standardizer = StandardScaler()
+        bayes_classifier = GaussianNB()
+        classifier = make_pipeline(standardizer, bayes_classifier)
+        
     elif args.knn is not None:
+        # k-nearest neighbor classifier
         print("    {0} nearest neighbor classifier".format(args.knn))
         log_param("classifier", "knn")
         log_param("k", args.knn)
@@ -92,13 +103,13 @@ if args.fbeta:
 if args.sensitivity:
     target_names = ["non-viral", "viral"]
     cl_report = classification_report(data["labels"], prediction, target_names=target_names, zero_division=0, output_dict=True)
-    evaluation_metrics.append(("Sensitivity", cl_report["viral"]["recall"]))
+    evaluation_metrics.append(("sensitivity", cl_report["viral"]["recall"]))
 
 # compute and print them
 for metric_name, metric in evaluation_metrics:
     if metric_name == "F-beta score":
         metric_value = metric(data["labels"], prediction, beta=1)
-    elif metric_name == "Sensitivity":
+    elif metric_name == "sensitivity":
         metric_value = metric
     else:
         metric_value = metric(data["labels"], prediction)
