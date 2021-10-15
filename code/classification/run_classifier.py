@@ -100,7 +100,7 @@ else:   # manually set up a classifier
         rf_classifier = RandomForestClassifier(n_estimators=args.rf, n_jobs = -1)
         classifier = make_pipeline(standardizer, rf_classifier)
         
-    elif args.svm == "linear" or "polynomial" or "rbf" or "sigmoid":
+    elif args.svm == "linear" or args.svm == "polynomial" or args.svm == "rbf" or args.svm == "sigmoid":
         # support vector machine classifier
         print("    support vector machine classifier with {0} kernel".format(args.svm))
         log_param("classifier", "svm")
