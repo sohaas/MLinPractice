@@ -209,4 +209,3 @@ print("Compare: ", X[0], embedded_transformed[0])
 
 
 
-

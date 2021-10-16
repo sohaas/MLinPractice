@@ -11,6 +11,7 @@ Created on Tue Sep 28 16:43:18 2021
 import argparse, csv, pickle
 import pandas as pd
 from sklearn.pipeline import make_pipeline
+from code.preprocessing.links_remover import LinksRemover
 from code.preprocessing.punctuation_remover import PunctuationRemover
 from code.preprocessing.lowercaser import Lowercaser
 from code.preprocessing.tokenizer import Tokenizer
@@ -18,12 +19,14 @@ from code.preprocessing.value_handler import ValueHandler
 from code.preprocessing.lemmatizer import Lemmatizer
 from code.preprocessing.stemmer import Stemmer
 from code.preprocessing.stopworder import Stopworder
-from code.util import COLUMN_TWEET, COLUMN_LANGUAGE, COLUMN_TWEET_TOKENS, SUFFIX_NO_PUNCTUATION, SUFFIX_LOWERCASED, SUFFIX_TOKENIZED, SUFFIX_LEMMATIZED, SUFFIX_STEMMED, SUFFIX_NO_STOPWORDS
+from code.util import COLUMN_TWEET, COLUMN_LANGUAGE, COLUMN_TWEET_TOKENS, COLUMN_NO_LINKS, SUFFIX_NO_PUNCTUATION, SUFFIX_LOWERCASED, SUFFIX_TOKENIZED, SUFFIX_LEMMATIZED, SUFFIX_STEMMED, SUFFIX_NO_STOPWORDS
 
 # setting up CLI
 parser = argparse.ArgumentParser(description = "Various preprocessing steps")
 parser.add_argument("input_file", help = "path to the input csv file")
 parser.add_argument("output_file", help = "path to the output csv file")
+parser.add_argument("-li", "--links", action = "store_true", help = "remove links")
+parser.add_argument("--links_input", help = "input column used for links", default = COLUMN_TWEET)
 parser.add_argument("-p", "--punctuation", action = "store_true", help = "remove punctuation")
 parser.add_argument("--punctuation_input", help = "input column used for punctuation", default = COLUMN_TWEET)
 parser.add_argument("-l", "--lowercase", action = "store_true", help = "convert to lowercase")
@@ -48,6 +51,8 @@ df = pd.read_csv(args.input_file, quoting = csv.QUOTE_NONNUMERIC, lineterminator
 preprocessors = []
 if args.handle_values:
     preprocessors.append(ValueHandler(args.handle_values_input, None))
+if args.links:
+    preprocessors.append(LinksRemover(args.links_input, COLUMN_NO_LINKS))
 if args.punctuation:
     preprocessors.append(PunctuationRemover(args.punctuation_input, args.punctuation_input + SUFFIX_NO_PUNCTUATION))
 if args.lowercase:
