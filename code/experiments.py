@@ -13,7 +13,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import Counter
 from nltk.corpus import wordnet
 
-# attempting keyword extraction with tf-idf
+"""# attempting keyword extraction with tf-idf
 # do this on stemmed tweets with stopwords and links removed
 # maybe take two words from every tweet instead of only one
 # easy feature: does one of the keywords appear in the tweet: yes, no; or how
@@ -21,7 +21,7 @@ from nltk.corpus import wordnet
 # more difficult option: group keywords into topics if possible; extend by 
 # synonyms and similar words with the help of wordnet
 
-"""df = pd.read_csv("data/preprocessing/split/training.csv", quoting = csv.QUOTE_NONNUMERIC, lineterminator = "\n")
+df = pd.read_csv("data/preprocessing/split/training.csv", quoting = csv.QUOTE_NONNUMERIC, lineterminator = "\n")
 df = df[:15000]
 tweets = df["tweet"]
 
@@ -54,10 +54,28 @@ for i in range(0, len(words)):
             for synonym in synonyms:
                 if not synonym in topic:
                     topic.append(synonym)
-        keywords.append(topic)"""
+        keywords.append(topic)
         
 # print(keywords)
 
 a = np.array([[1,2,3], [4,5,6]])
 for column in a.T:
-   print(column)
+   print(column)"""
+   
+   
+# ordering a dict
+
+exmp_dict = {"hello": 5,
+        "my": 2,
+        "name": 4,
+        "is": 1,
+        "Tjorven": 3}
+
+ordered = sorted(exmp_dict.items(), key=lambda x:x[1], reverse=True)
+
+print(ordered)
+
+
+
+
+
