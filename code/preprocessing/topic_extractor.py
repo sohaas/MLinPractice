@@ -32,21 +32,46 @@ class TopicExtractor(Preprocessor):
     def _get_values(self, inputs, df):
         print("Extracting topics")
           
-        # get tf_idf vectors
-        tf_idf_vectors, vectorizer = self._get_tfidf_scores()
+        # get words with highest tf_idf score
+        freq_words = self._get_freq_words()
+                
+        # get topics (= keywords and their synonyms)
+        counted = Counter(freq_words)
+        topics = self._get_topics(list(counted.keys()), list(counted.values()))
+             
+        # search tweets for topics and store
+        features = np.full((len(self.tweets), len(topics)), False, dtype=bool)
+        for i in range(0, len(self.tweets)):
+            tweet_list = ast.literal_eval(self.tweets[i])
+            for j in range(0, len(topics)):
+                if (set(tweet_list) & set(topics[j])):
+                    features[i,j] = True          
+        features_list = []
+        for column in features.T:
+            features_list.append(pd.DataFrame(data=column))       
+            
+        return features_list         
         
+    def _get_freq_words(self):
+        vectorizer = TfidfVectorizer(lowercase=False)
+        tf_idf_vectors = vectorizer.fit_transform(self.tweets_lim).todense()
+    
         # store words with highest tf_idf scores
         freq_words = []
         for i in range(0,len(self.tweets_lim)): 
             if self.labels[i] == True:
                 idx_highest = np.argmax(tf_idf_vectors[i])
                 freq_words.append(vectorizer.get_feature_names()[idx_highest])
-        
-        # get keywords and their synonyms
-        counts = Counter(freq_words)
-        words = list(counts.keys())
-        frequency = list(counts.values())
-        
+        return freq_words
+    
+    def _get_synonyms(self, word):
+        synsets = wordnet.synsets(word)
+        synonyms = []
+        for syn in synsets:
+            synonyms += [str(lemma.name()) for lemma in syn.lemmas()]     
+        return synonyms
+    
+    def _get_topics(self, words, frequency):
         topics = []
         self._output_column = []
         for i in range(0, len(words)):
@@ -54,30 +79,5 @@ class TopicExtractor(Preprocessor):
                 topic = [words[i]] + self._get_synonyms(words[i])
                 topics.append(list(set(topic)))
                 self._output_column.append("topic_" + words[i])
-                
-        features = np.full((len(self.tweets), len(topics)), False, dtype=bool)
-        for i in range(0, len(self.tweets)):
-            tweet_list = ast.literal_eval(self.tweets[i])
-            for j in range(0, len(topics)):
-                if (set(tweet_list) & set(topics[j])):
-                    features[i,j] = True
-                    
-        features_list = []
-        for column in features.T:
-            features_list.append(pd.DataFrame(data=column))
-            
-        return features_list
-                
-        
-    def _get_tfidf_scores(self):
-        vectorizer = TfidfVectorizer(lowercase=False)
-        return (vectorizer.fit_transform(self.tweets_lim).todense(), vectorizer)
-    
-    def _get_synonyms(self, word):
-        synsets = wordnet.synsets(word)
-        synonyms = []
-        for syn in synsets:
-            synonyms += [str(lemma.name()) for lemma in syn.lemmas()]
-            
-        return synonyms
+        return topics
         
