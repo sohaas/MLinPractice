@@ -44,9 +44,15 @@ class FeatureCollector(FeatureExtractor):
         all_feature_values = []
         
         for feature in self._features:
-            all_feature_values.append(feature.transform(df))
+            output = feature.transform(df)
+            if isinstance(output, list):
+                for ft in output:
+                    all_feature_values.append(ft)
+            else:
+                all_feature_values.append(output)
         
         result = np.concatenate(all_feature_values, axis = 1)
+        print(result.shape)
         return result
 
     def get_feature_names(self):
