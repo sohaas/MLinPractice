@@ -84,6 +84,14 @@ manually checking for columns with a low rate of entries and then
 (computationally) checking for rows with empty tweet entries. All columns and
 rows that we found to be not informative as described above were removed. 
 
+Following that, we removed all links from the original tweets to keep them from
+interfering with the extraction of topics that is performed 
+later in the preprocessing. This could otherwise be the case, as the topic 
+extraction is performed with the tfidf methodology, which oftentimes rates links 
+with high scores. As the links are not only present in the tweets, but also 
+stored in a separate column of the dataset, their is no loss of information by
+the removal of those in the tweets.
+
 For the preprocessing of our data, we decided to convert the tweets to
 lowercase in addition to the removal of the punctuation and the tokenization.
 

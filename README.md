@@ -58,6 +58,7 @@ The script `run_preprocessing.py` is used to run various preprocessing steps on 
 Here, `input.csv` is a csv file (ideally the output of `create_labels.py`), while `output.csv` is the csv file where the output will be written.
 The preprocessing steps to take can be configured with the following flags:
 - `-ha` or `--handle_values`: Columns with an unsufficient amount of entries (specified in COLUMNS_REMOVE) are removed together with every row that contains an empty tweet.
+- `-li` or `--links`: A new column is created by removing all links from the given input column (specified by `--links_input`, defaults to `"tweet"`). New column name is "tweet_no_links".
 - `-p` or `--punctuation`: A new column is created by removing all punctuation from the given input column (specified by `--punctuation_input`, defaults to `"tweet"`). New column name equals old colum name plus suffix "_no_punctuation".
 - `-l` or `--lowercase`: A new column is created by lowercasing the given input column (specified by `--lowercase_input`, defaults to `"tweet"`). New column name equals old colum name plus suffix "_lowercased".
 - `-t` or `--tokenize`: A new column is created by tokenizing the given input column (specified by `--tokenize_input`, defaults to `"tweet"`). New column name equals old colum name plus suffix "_tokenized".
