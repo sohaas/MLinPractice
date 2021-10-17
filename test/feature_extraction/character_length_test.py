@@ -22,7 +22,7 @@ class CharacterLengthTest(unittest.TestCase):
     def test_feature_name(self):
         self.assertEqual(self.character_length.get_feature_name(), self.INPUT_COLUMN + "_charlength")
 
-    def test_sentiment(self):
+    def test_char_length(self):
         input_text = "This tweets contains 34 characters"
         input_df = pd.DataFrame()
         input_df[self.INPUT_COLUMN] = [input_text]
