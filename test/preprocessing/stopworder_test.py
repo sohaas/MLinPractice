@@ -24,7 +24,7 @@ class StopworderTest(unittest.TestCase):
     def test_output_column(self):
         self.assertEqual(self.stopworder._output_column, self.OUTPUT_COLUMN)
        
-    def test_value_handling(self):
+    def test_stopworder(self):
         input_tweet = "['This', 'is', 'an', 'example', 'sentence', 'with', 'stopwords']"
         input_language = "en"
         output_text = "['example', 'sentence', 'stopwords']"
