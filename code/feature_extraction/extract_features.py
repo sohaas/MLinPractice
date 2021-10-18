@@ -49,6 +49,7 @@ else:    # need to create FeatureCollector manually
         # character length of original tweet (without any changes)
         features.append(CharacterLength(COLUMN_TWEET))
     if args.topics:
+        # topics of preprocessed tweet
         input_cols = list(filter(lambda x: "topic_" in x, list(df.columns)))
         features.append(Topics(input_cols))
     if args.sentiment:

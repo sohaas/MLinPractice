@@ -52,7 +52,6 @@ class FeatureCollector(FeatureExtractor):
                 all_feature_values.append(output)
         
         result = np.concatenate(all_feature_values, axis = 1)
-        print(result.shape)
         return result
 
     def get_feature_names(self):
