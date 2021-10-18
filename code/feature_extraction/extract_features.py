@@ -13,8 +13,10 @@ import pandas as pd
 import numpy as np
 from code.feature_extraction.character_length import CharacterLength
 from code.feature_extraction.sentiment_analyzer import SentimentAnalyzer
+from code.feature_extraction.language_en import EnglishLanguage
+from code.feature_extraction.url_included import UrlIncluded
 from code.feature_extraction.feature_collector import FeatureCollector
-from code.util import COLUMN_TWEET, COLUMN_LABEL
+from code.util import COLUMN_TWEET, COLUMN_LANGUAGE, COLUMN_URL, COLUMN_LABEL
 
 
 # setting up CLI
@@ -25,6 +27,8 @@ parser.add_argument("-e", "--export_file", help = "create a pipeline and export 
 parser.add_argument("-i", "--import_file", help = "import an existing pipeline from the given location", default = None)
 parser.add_argument("-c", "--char_length", action = "store_true", help = "compute the number of characters in the tweet")
 parser.add_argument("-s", "--sentiment", action = "store_true", help = "analyze the sentiment of the tweet")
+parser.add_argument("-l", "--language", action = "store_true", help = "analyze whether the tweet is in English")
+parser.add_argument("-u", "--url", action = "store_true", help = "analyze whether the tweet contains an URL")
 args = parser.parse_args()
 
 # load data
@@ -45,6 +49,12 @@ else:    # need to create FeatureCollector manually
     if args.sentiment:
         # sentiment of original tweet (without any changes)
         features.append(SentimentAnalyzer(COLUMN_TWEET))
+    if args.language:
+        # language of original tweet (without any changes)
+        features.append(EnglishLanguage(COLUMN_LANGUAGE))
+    if args.url:
+        # urls of original tweet (without any changes)
+        features.append(UrlIncluded(COLUMN_URL))
     
     # create overall FeatureCollector
     feature_collector = FeatureCollector(features)
