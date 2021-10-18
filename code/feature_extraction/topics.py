@@ -9,7 +9,7 @@ Created on Sat Oct 16 09:46:18 2021
 import numpy as np
 from code.feature_extraction.feature_extractor import FeatureExtractor
 
-# class for extracting the character-based length as a feature
+# class for extracting topics as a feature
 class Topics(FeatureExtractor):
     
     # constructor
@@ -18,7 +18,7 @@ class Topics(FeatureExtractor):
     
     # don't need to fit, so don't overwrite _set_variables()
     
-    # compute the word length based on the inputs
+    # get presence of topics from the inputs
     def _get_values(self, inputs):
         
         topic_features = []
@@ -26,6 +26,3 @@ class Topics(FeatureExtractor):
             topic_features.append(np.array(col).reshape(-1,1))
         return topic_features
         
-        """result = np.array(inputs[0].str.len())
-        result = result.reshape(-1,1)
-        return result"""

@@ -60,15 +60,16 @@ if args.lowercase and args.lowercase_input.endswith(SUFFIX_NO_PUNCTUATION):
     preprocessors.append(Lowercaser(args.lowercase_input, args.lowercase_input.partition(SUFFIX_NO_PUNCTUATION)[0] + SUFFIX_LOWERCASED))
 if args.tokenize and args.tokenize_input.endswith(SUFFIX_LOWERCASED):
     preprocessors.append(Tokenizer(args.tokenize_input, args.tokenize_input.partition(SUFFIX_LOWERCASED)[0] + SUFFIX_TOKENIZED))
-# only allow stopwords to be removed from "_tokenized" colums
+# only allow stopwords to be removed from "_tokenized" columns
 if args.stopwords and args.stopwords_input.endswith(SUFFIX_TOKENIZED):
     preprocessors.append(Stopworder([args.stopwords_input, COLUMN_LANGUAGE], args.stopwords_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_NO_STOPWORDS))
-# only allow "_tokenized" colums to be lemmatized
+# only allow lemmatization of "_no_stopwords" columns
 if args.lemmatize and args.lemmatize_input.endswith(SUFFIX_NO_STOPWORDS):
     preprocessors.append(Lemmatizer(args.lemmatize_input, args.tokenize_input.partition(SUFFIX_NO_STOPWORDS)[0] + SUFFIX_LEMMATIZED))
-# only allow "_tokenized" colums to be stemmed
+# only allow stemming of "_no_stopwords" columns
 if args.stem and args.stem_input.endswith(SUFFIX_NO_STOPWORDS):
     preprocessors.append(Stemmer([args.stem_input, COLUMN_LANGUAGE], args.stem_input.partition(SUFFIX_NO_STOPWORDS)[0] + SUFFIX_STEMMED))
+# only allow topic extraction from "_no_stopwords" columns
 if args.extract and args.extract_input.endswith(SUFFIX_NO_STOPWORDS):
     preprocessors.append(TopicExtractor([args.extract_input, COLUMN_LABEL], None))
 
