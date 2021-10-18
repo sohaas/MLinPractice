@@ -40,7 +40,7 @@ parser.add_argument("--stopwords_input", help = "input column used for removing 
 parser.add_argument("-s", "--stem", action = "store_true", help = "remove stemming of words in given column")
 parser.add_argument("--stem_input", help = "input column used for stemming", default = COLUMN_NO_STOP)
 parser.add_argument("-le", "--lemmatize", action = "store_true", help = "lemmatize given column into root words")
-parser.add_argument("--lemmatize_input", help = "input column used for lemmatization", default = COLUMN_TWEET_TOKENS)
+parser.add_argument("--lemmatize_input", help = "input column used for lemmatization", default = COLUMN_NO_STOP)
 parser.add_argument("-ex", "--extract", action = "store_true", help = "extract topics from given column")
 parser.add_argument("--extract_input", help = "input column used for topic extraction", default = COLUMN_NO_STOP)
 parser.add_argument("-e", "--export_file", help = "create a pipeline and export to the given location", default = None)
@@ -56,20 +56,20 @@ if args.handle_values:
     preprocessors.append(ValueHandler(args.handle_values_input, None))
 if args.punctuation:
     preprocessors.append(PunctuationRemover(args.punctuation_input, args.punctuation_input + SUFFIX_NO_PUNCTUATION))
-if args.lowercase:
-    preprocessors.append(Lowercaser(args.lowercase_input, "tweet_lowercased"))
-if args.tokenize:
-    preprocessors.append(Tokenizer(args.tokenize_input, "tweet_tokenized"))
+if args.lowercase and args.lowercase_input.endswith(SUFFIX_NO_PUNCTUATION):
+    preprocessors.append(Lowercaser(args.lowercase_input, args.lowercase_input.partition(SUFFIX_NO_PUNCTUATION)[0] + SUFFIX_LOWERCASED))
+if args.tokenize and args.tokenize_input.endswith(SUFFIX_LOWERCASED):
+    preprocessors.append(Tokenizer(args.tokenize_input, args.tokenize_input.partition(SUFFIX_LOWERCASED)[0] + SUFFIX_TOKENIZED))
 # only allow stopwords to be removed from "_tokenized" colums
 if args.stopwords and args.stopwords_input.endswith(SUFFIX_TOKENIZED):
-        preprocessors.append(Stopworder([args.stopwords_input, COLUMN_LANGUAGE], "tweet_no_stopwords"))
+    preprocessors.append(Stopworder([args.stopwords_input, COLUMN_LANGUAGE], args.stopwords_input.partition(SUFFIX_TOKENIZED)[0] + SUFFIX_NO_STOPWORDS))
 # only allow "_tokenized" colums to be lemmatized
-if args.lemmatize and args.lemmatize_input.endswith(SUFFIX_TOKENIZED):
-        preprocessors.append(Lemmatizer(args.lemmatize_input, "tweet_lemmatized"))
+if args.lemmatize and args.lemmatize_input.endswith(SUFFIX_NO_STOPWORDS):
+    preprocessors.append(Lemmatizer(args.lemmatize_input, args.tokenize_input.partition(SUFFIX_NO_STOPWORDS)[0] + SUFFIX_LEMMATIZED))
 # only allow "_tokenized" colums to be stemmed
 if args.stem and args.stem_input.endswith(SUFFIX_NO_STOPWORDS):
-        preprocessors.append(Stemmer([args.stem_input, COLUMN_LANGUAGE], "tweet_stemmed"))
-if args.extract:
+    preprocessors.append(Stemmer([args.stem_input, COLUMN_LANGUAGE], args.stem_input.partition(SUFFIX_NO_STOPWORDS)[0] + SUFFIX_STEMMED))
+if args.extract and args.extract_input.endswith(SUFFIX_NO_STOPWORDS):
     preprocessors.append(TopicExtractor([args.extract_input, COLUMN_LABEL], None))
 
 
