@@ -31,7 +31,7 @@ class ValueHandler(Preprocessor):
             del df[col]
             
         # delete rows without tweet
-        empty_tweet = df["tweet"]==("" or " " or None)
+        empty_tweet = df["tweet"]!=("" or " " or None)
         df = df[empty_tweet]
             
         return df
