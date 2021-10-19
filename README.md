@@ -58,13 +58,14 @@ The script `run_preprocessing.py` is used to run various preprocessing steps on 
 Here, `input.csv` is a csv file (ideally the output of `create_labels.py`), while `output.csv` is the csv file where the output will be written.
 The preprocessing steps to take can be configured with the following flags:
 - `-ha` or `--handle_values`: Columns with an unsufficient amount of entries (specified in COLUMNS_REMOVE) are removed together with every row that contains an empty tweet.
-- `-li` or `--links`: A new column is created by removing all links from the given input column (specified by `--links_input`, defaults to `"tweet"`). New column name is "tweet_no_links".
-- `-p` or `--punctuation`: A new column is created by removing all punctuation from the given input column (specified by `--punctuation_input`, defaults to `"tweet"`). New column name equals old colum name plus suffix "_no_punctuation".
-- `-l` or `--lowercase`: A new column is created by lowercasing the given input column (specified by `--lowercase_input`, defaults to `"tweet"`). New column name equals old colum name plus suffix "_lowercased".
-- `-t` or `--tokenize`: A new column is created by tokenizing the given input column (specified by `--tokenize_input`, defaults to `"tweet"`). New column name equals old colum name plus suffix "_tokenized".
-- `-le` or `--lemmatize`: A new column is created by lemmatizing the given input column (specified by `--lemmatize_input`, may only be "_tokenized" columns and defaults to `"tweet_tokenized"`). New column name equals old colum name where suffix "_tokenized" is replaced with "_lemmatized".
-- `-s` or `--stem`: A new column is created by stemming the given input column (specified by `--stem_input`, may only be "_tokenized" columns and defaults to `"tweet_tokenized"`). New column name equals old colum name where suffix "_tokenized" is replaced with "_stemmed".
+- `-li` or `--links`: A new column is created by removing all links from the given input column (specified by `--links_input`, defaults to `"tweet"`). New column name equals old column name plus suffix "_no_links".
+- `-p` or `--punctuation`: A new column is created by removing all punctuation from the given input column (specified by `--punctuation_input`, defaults to `"tweet_no_links"`). New column name equals old column name where suffix "_no_links" is replaced with "_no_punctuation".
+- `-l` or `--lowercase`: A new column is created by lowercasing the given input column (specified by `--lowercase_input`, defaults to `"tweet_no_punctuation"`). New column name equals old colum name where suffix "_no_punctuation" is replaced with "_lowercased".
+- `-t` or `--tokenize`: A new column is created by tokenizing the given input column (specified by `--tokenize_input`, defaults to `"tweet_lowercased"`). New column name equals old colum name where suffix "_lowercased" is replaced with "_tokenized".
 - `-st` or `--stopwords`: A new column is created by removing all stopwords from the given input column (specified by `--stopwords_input`, may only be "_tokenized" columns and defaults to `"tweet_tokenized"`). New column name equals old colum name where suffix "_tokenized" is replaced with "_no_stopwords".
+- `-le` or `--lemmatize`: A new column is created by lemmatizing the given input column (specified by `--lemmatize_input`, may only be "_tokenized" columns and defaults to `"tweet_no_stopwords"`). New column name equals old colum name where suffix "_no_stopwords" is replaced with "_lemmatized".
+- `-s` or `--stem`: A new column is created by stemming the given input column (specified by `--stem_input`, may only be "_tokenized" columns and defaults to `"tweet_no_stopwords"`). New column name equals old colum name where suffix "_no_stopwords" is replaced with "_stemmed".
+- `-ex` or `--extract`: Multiple new columns are created by extracting frequent topics from the given input column (specified by `--extract_input`, may only be "_tokenized" columns and defaults to `"tweet_no_stopwords"`). New column name is "topic_" + the name of the topic.
 
 Moreover, the script accepts the following optional parameters:
 - `-e` or `--export` gives the path to a pickle file where an sklearn pipeline of the different preprocessing steps will be stored for later usage.
@@ -96,6 +97,7 @@ The features to be extracted can be configured with the following optional param
 - `-s` or `--sentiment`: Analyze the sentiment of the "tweet" column of the data frame. (see code/feature_extraction/sentiment_analyzer.py)
 - `-l` or `--language`: Check whether the language of the tweet is English ("en" in "language" column). (see code/feature_extraction/language_en.py)
 - `-u` or `--url`: Check whether the tweet contains any URLs ("urls" column not empty). (see code/feature_extraction/url_included.py)
+- `-t` or `--topics`: Check whether frequent topics are present in tweet ("True" in respective "topic_<topic_name>" column). (see code/feature_extraction/topics.py)
 
 Moreover, the script support importing and exporting fitted feature extractors with the following optional arguments:
 - `-i` or `--import_file`: Load a configured and fitted feature extraction from the given pickle file. Ignore all parameters that configure the features to extract.
