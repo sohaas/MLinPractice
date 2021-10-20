@@ -8,7 +8,6 @@ Created on Thu Oct  7 16:41:29 2021
 
 from code.preprocessing.preprocessor import Preprocessor
 from code.util import COLUMNS_REMOVE
-import nltk
 
 class ValueHandler(Preprocessor):
     """Handles missing and faulty values in the input columns."""
@@ -30,8 +29,5 @@ class ValueHandler(Preprocessor):
         for col in self.rem_columns:
             del df[col]
             
-        # delete rows without tweet
-        empty_tweet = df["tweet"]!=("" or " " or None)
-        df = df[empty_tweet]
-            
-        return df
+        # delete rows without tweet upon return    
+        return df.loc[(df["tweet"] != "") & (df["tweet"] != " ") & (df.tweet.notnull())]
