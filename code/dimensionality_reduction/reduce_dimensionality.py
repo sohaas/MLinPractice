@@ -9,7 +9,8 @@ Created on Wed Sep 29 13:33:37 2021
 """
 
 import argparse, pickle
-from sklearn.feature_selection import SelectKBest, mutual_info_classif
+from sklearn.feature_selection import SelectKBest, mutual_info_classif, RFE
+from sklearn.linear_model import LogisticRegression
 
 
 # setting up CLI
@@ -18,6 +19,7 @@ parser.add_argument("input_file", help = "path to the input pickle file")
 parser.add_argument("output_file", help = "path to the output pickle file")
 parser.add_argument("-e", "--export_file", help = "create a pipeline and export to the given location", default = None)
 parser.add_argument("-i", "--import_file", help = "import an existing pipeline from the given location", default = None)
+parser.add_argument("-r", "--rfe", type = int, help = "select n best features with recursive frature elimination using a logistic regression model", default = None)
 parser.add_argument("-m", "--mutual_information", type = int, help = "select K best features with Mutual Information", default = None)
 parser.add_argument("--verbose", action = "store_true", help = "print information about feature selection process")
 args = parser.parse_args()
@@ -56,7 +58,28 @@ else: # need to set things up manually
             print("    {0}".format(feature_names))
             print("    " + str(dim_red.scores_))
             print("    " + str(get_feature_names(dim_red, feature_names)))
-    pass
+    
+    elif args.rfe is not None:
+        # select n best features based on RFE/LogReg
+        estimator = LogisticRegression(random_state = 42, max_iter = 10000)
+        dim_red = RFE(estimator, n_features_to_select = args.rfe)
+        dim_red.fit(features, labels.ravel())
+        
+        # resulting feature names based on support given by RFE
+        def get_feature_names(rfe, names):
+            support = rfe.get_support()
+            result = []
+            for name, selected in zip(names, support):
+                if selected:
+                    result.append(name)
+            return result
+        
+        if args.verbose:
+            print("    RFE with Logistic Regression and n = {0}".format(args.rfe))
+            print("    {0}".format(feature_names))
+            print("    " + str(dim_red.ranking_))
+            print("    " + str(get_feature_names(dim_red, feature_names)))
+        
 
 # apply the dimensionality reduction to the given features
 reduced_features = dim_red.transform(features)
