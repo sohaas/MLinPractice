@@ -14,15 +14,15 @@ class Topics(FeatureExtractor):
     
     # constructor
     def __init__(self, input_column):
-        super().__init__(input_column, "{0}_topics".format(input_column))
+        super().__init__(input_column, "topics")
     
     # don't need to fit, so don't overwrite _set_variables()
     
     # get presence of topics from the inputs
     def _get_values(self, inputs):
-        
         topic_features = []
         for col in inputs:
+            col = col.astype(int)
             topic_features.append(np.array(col).reshape(-1,1))
         return topic_features
         
