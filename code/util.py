@@ -22,9 +22,13 @@ COLUMNS_REMOVE = ["place", "cashtags", "retweet", "near", "geo", "source",
 
 # column names of novel columns for preprocessing
 COLUMN_LABEL = "label"
+COLUMN_NO_PUNCT = "tweet_no_punctuation"
+COLUMN_LOWERCASE = "tweet_lowercased"
 COLUMN_TWEET_TOKENS = "tweet_tokenized"
+COLUMN_NO_STOP = "tweet_no_stopwords"
 COLUMN_NO_LINKS = "tweet_no_links"
 
+# suffixes for new columns
 SUFFIX_NO_PUNCTUATION = "_no_punctuation"
 SUFFIX_LOWERCASED = "_lowercased"
 SUFFIX_TOKENIZED = "_tokenized"

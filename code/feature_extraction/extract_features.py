@@ -12,11 +12,12 @@ import argparse, csv, pickle
 import pandas as pd
 import numpy as np
 from code.feature_extraction.character_length import CharacterLength
+from code.feature_extraction.topics import Topics
 from code.feature_extraction.sentiment_analyzer import SentimentAnalyzer
 from code.feature_extraction.language_en import EnglishLanguage
 from code.feature_extraction.url_included import UrlIncluded
 from code.feature_extraction.feature_collector import FeatureCollector
-from code.util import COLUMN_TWEET, COLUMN_LANGUAGE, COLUMN_URL, COLUMN_LABEL
+from code.util import COLUMN_TWEET, COLUMN_LABEL, COLUMN_LANGUAGE, COLUMN_URL
 
 
 # setting up CLI
@@ -26,6 +27,7 @@ parser.add_argument("output_file", help = "path to the output pickle file")
 parser.add_argument("-e", "--export_file", help = "create a pipeline and export to the given location", default = None)
 parser.add_argument("-i", "--import_file", help = "import an existing pipeline from the given location", default = None)
 parser.add_argument("-c", "--char_length", action = "store_true", help = "compute the number of characters in the tweet")
+parser.add_argument("-t", "--topics", action = "store_true", help = "access topics present in the tweet")
 parser.add_argument("-s", "--sentiment", action = "store_true", help = "analyze the sentiment of the tweet")
 parser.add_argument("-l", "--language", action = "store_true", help = "analyze whether the tweet is in English")
 parser.add_argument("-u", "--url", action = "store_true", help = "analyze whether the tweet contains an URL")
@@ -46,6 +48,10 @@ else:    # need to create FeatureCollector manually
     if args.char_length:
         # character length of original tweet (without any changes)
         features.append(CharacterLength(COLUMN_TWEET))
+    if args.topics:
+        # topics of preprocessed tweet
+        input_cols = list(filter(lambda x: "topic_" in x, list(df.columns)))
+        features.append(Topics(input_cols))
     if args.sentiment:
         # sentiment of original tweet (without any changes)
         features.append(SentimentAnalyzer(COLUMN_TWEET))

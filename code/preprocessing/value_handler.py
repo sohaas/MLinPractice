@@ -24,6 +24,7 @@ class ValueHandler(Preprocessor):
     def _get_values(self, inputs, df):
         """Delete unnecessary data."""
         
+        print("Handling missing values")
         # delete columns with no or an unsufficient amount of values
         df.columns = [x.replace("\r", "") for x in df.columns.to_list()]
         for col in self.rem_columns:
