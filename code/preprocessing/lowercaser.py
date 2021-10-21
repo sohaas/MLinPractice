@@ -22,6 +22,8 @@ class Lowercaser(Preprocessor):
     
     def _get_values(self, inputs, df):
         """Lowercase the tweet."""
+        
+        print("Lowercasing")
         lowercased = []
         
         for tweet in inputs[0]:                

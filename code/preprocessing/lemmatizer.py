@@ -25,6 +25,7 @@ class Lemmatizer(Preprocessor):
     def _get_values(self, inputs, df):
         """Lemmatize the tweet."""
         
+        print("Lemmatizing")
         lemmatized = []
         lemmatizer = WordNetLemmatizer()
         

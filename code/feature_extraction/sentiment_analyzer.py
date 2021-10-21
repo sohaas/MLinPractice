@@ -9,10 +9,7 @@ Created on Thu Sep 14 10:40:13 2021
 """
 
 import numpy as np
-<<<<<<< Updated upstream
-=======
 from sklearn.preprocessing import OrdinalEncoder
->>>>>>> Stashed changes
 from code.feature_extraction.feature_extractor import FeatureExtractor
 from nltk.sentiment import SentimentIntensityAnalyzer
 
@@ -31,20 +28,13 @@ class SentimentAnalyzer(FeatureExtractor):
         sia = SentimentIntensityAnalyzer()
         sentiment = []
         
-        negative = bin(0)
-        neutral = bin(1)
-        positive = bin(2)
-        
         for tweet in inputs[0]: 
             compoundScore = sia.polarity_scores(tweet)["compound"]
             if compoundScore <= -0.05:
-                sentiment.append(negative)
+                sentiment.append("negative")
             elif compoundScore >= 0.05: 
-                sentiment.append(positive)
+                sentiment.append("positive")
             else:          
-<<<<<<< Updated upstream
-                sentiment.append(neutral)
-=======
                 sentiment.append("neutral")
             
         # ordinal encoding
@@ -52,8 +42,5 @@ class SentimentAnalyzer(FeatureExtractor):
         features = features.reshape(-1,1)
         encoder = OrdinalEncoder()
         encoder.fit(features)
->>>>>>> Stashed changes
         
-        result = np.array(sentiment)
-        result = result.reshape(-1,1)
-        return result
+        return encoder.transform(features)

@@ -26,7 +26,7 @@ class FeatureCollector(FeatureExtractor):
             input_columns += feature.get_input_columns()
         
         # remove duplicate columns
-        input_colums = list(set(input_columns))
+        input_columns = list(set(input_columns))
         
         # call constructor of super class
         super().__init__(input_columns, "FeatureCollector")
@@ -44,7 +44,12 @@ class FeatureCollector(FeatureExtractor):
         all_feature_values = []
         
         for feature in self._features:
-            all_feature_values.append(feature.transform(df))
+            output = feature.transform(df)
+            if isinstance(output, list):
+                for ft in output:
+                    all_feature_values.append(ft)
+            else:
+                all_feature_values.append(output)
         
         result = np.concatenate(all_feature_values, axis = 1)
         return result

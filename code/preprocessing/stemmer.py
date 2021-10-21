@@ -25,6 +25,7 @@ class Stemmer(Preprocessor):
     def _get_values(self, inputs, df):
         """Stem the tweet."""
         
+        print("Stemming")
         stemmed = []
         
         for index, value in inputs[0].items():

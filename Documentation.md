@@ -78,40 +78,77 @@ things (depending on what you do, that may be better structured).
 Which kind of preprocessing steps did you implement? Why are they necessary
 and/or useful down the road?
 
-Before any of the other preprocessing steps, we decided to remove any
+Before any of the other preprocessing steps, we decided to remove all
 unnecessary data to keep it as simple as possible. We did this by first
 manually checking for columns with a low rate of entries and then
 (computationally) checking for rows with empty tweet entries. All columns and
-rows that we found to be not informative as described above were removed. 
+rows that we found to be not informative (as described) were removed. 
 
-For the preprocessing of our data, we decided to convert the tweets to
-lowercase in addition to the removal of the punctuation and the tokenization.
-
+Following that, we removed all links from the original tweets as they were
+oftentimes rated highly in the later occuring tf-idf-driven extraction of topics.
+As the links are not only present in the tweets, but also stored in a separate 
+column of the dataset, the information on urls was not lost, but could still be 
+used as a feature. This step was set before the removal of punctuation so that 
+the distinctive punctuation of the urls was available to facilitate their 
+recognition with a regular expression. After this step, however, punctuation was
+removed from the tweets. Similarly, all uppercase letters were lowercased.
 We are aware that punctuation and uppercase letters could be used as features
 to see if tweets containing, e.g. a lot of exclamation marks or "yelled words"
 are likely to become viral. However, we decided to remove them in order to
-facilitate subsequent content analyses. In case this decision might be revoked
+simplify subsequent content analyses. In case this decision might be revoked
 later, a solution might be to simply count their occurences and normalize them
 with regard to the length of the tweet.
 
-In order to enable further preprocessiong steps, like lemmatization, the tweets
-were broken down into basic building blocks, i.e. single words by tokenization.
-Above that, for the same reason, the preprocessing step of removing the
-stopwords (like is, a, they) was implemented.
+To set up our more advanced preprocessiong steps (e.g. stemming etc.), 
+the tweets were broken down into basic building blocks (first sentences, then 
+single words) during tokenization. From that, stopwords (like is, a, they) were
+removed to not cludder further processing with nondescript words. At that point,
+the tweets were mostly free from interfering non-word information and the 
+tokenized form allowed for the continuation of the preprocessing on the word-level.
 
-First, our idea was to lemmatize the tweet after tokenizing it to optimize the
-data for the subsequent content analysis. The reason why we initially chose the
-approach of lemmatization over stemming was that in stemming, words are merely
-cut and not mapped to a meaningful base form like in lemmatization. Therefore,
-we assumed that, e.g. the word "caring" would become "car" with stemming,
-whereas lemmatization would correctly transform it to "care". Therefore, we
-implemented lemmatization, taking into account that it might be computationally
-more expensive. However when taking a look at the data after this preprocessing
-step, we were quite disappointed. Words like "detailed" or "dropping" were not
-transformed to "detail" and "drop" as expected, but stayed the same. So long
-story short, this is why we also implemented a stemmer. This way, we can ensure
-that words with different inflections are cut to the same root form, though
+For our word-level preprocessing, the first idea was to lemmatize the tweet after 
+tokenization and stopword removal. We thought lemmatization to be very powerful 
+as preparation for our content analysis, as usually during lemmatization the words 
+are not merely cut at the root like during stemming ("caring" to "car"), but 
+mapped to a an actual meaningful base form ("caring" to "care"). This would enable 
+our systems to recognize multiple different forms of a word as semantically equal, 
+thereby greatly enhancing the interpretation of the content.
+Therefore, we implemented lemmatization, taking into account that it might be 
+computationally more expensive. However when taking a look at the data after this 
+preprocessing step, we were quite disappointed. Words like "detailed" or "dropping" 
+were not transformed to "detail" and "drop" as expected, but stayed the same. 
+So long story short, this is why we also implemented a stemmer. This way, we can 
+ensure that words with different inflections are cut to the same root form, though
 they might be incorrect in meaning or spelling. 
+
+Lastly, all of our previously mentioned preprocessing was brought to use in the 
+content analysis of the tweets. There are of course a wide range of approaches,
+methods and degrees of detail in which such an analysis can take place. As the 
+analysis and interpretation of natural language is no easy task, we decided to 
+stay on the broad side and aimed for a rather undetailed and high-level extraction
+of content. In order to get a first contentual interpretation of the tweets, we
+employed the tf-idf method, as this is able to single out characteristic words
+by uprating frequent but unique terms in every tweet. Besides that, the tf-idf
+vectors are a complete representation of the semantic content and can be used 
+for example to compare the similarity of contents (e.g. with the cosine similarity).
+However in line with our high-level aim, we "only" extracted the words with 
+the highest score in order to get a keyword for every tweet. Again, there are 
+multiple ways that those keywords can be used. What we had in mind was to get a 
+brought sense of what the tweets are about, and to some extent we already had 
+this information within our keywords. What we still lacked however was a way of 
+interpreting the keywords, framing them in our context of virality and also more 
+on the practical side, categorizing them in order to achieve a little bit of
+structure and some kind of comparability of very similar words. For computational 
+and practical purposes we decided to focus on a very limited number of keywords,
+which we would broaden to something resembling a topic and use to categorize the
+content of the tweets (one or multiple topics are present or not present in the 
+tweet). Those topics should ideally be relevant to the classification of viral
+and non-viral tweets, which is why we chose the most frequent keywords from
+viral tweets as topic basis. We extended those in a rather simple way by getting 
+all of their synonyms from wordnet (filtering out duplicates). 
+Each tweet was now examined for intersections with the topics, and the presence
+or absence of a topic in a tweet was marked in a new column (i.e. one column per
+topic).
 
 
 ### Results
@@ -133,15 +170,6 @@ feature, up to you.
 Which features did you implement? What's their motivation and how are they
 computed?
 
-<<<<<<< Updated upstream
-In order to check for correlations regarding the sentiment of a tweet and its
-virality, we decided to categorize them into the three categories "positive",
-"neutral" and "negative". To facilitate the further handling of these values,
-we mapped them to binary numbers ("negative"=00, "neutral"=01, "positive"=10).
-For the categorization, we used the compound score of the
-SentimentIntensityAnalyzer's polarity_scores function. According to
-https://github.com/cjhutto/vaderSentiment#about-the-scoring :
-=======
 Since it might very well be possible that English tweets are more likely to
 become viral, due to the amount of people that speak the language, we
 chose this as a feature as well. So, we used the "language" column to
@@ -168,16 +196,17 @@ follows the same course of generation, they were created from only one feature
 extractor.  
 
 To add to the contentwise features, we decided to categorize the tweets into 
-the three categories "positive","neutral" and "negative" to check for 
+the three categories "positive", "neutral" and "negative" to check for 
 correlations regarding the sentiment of a tweet and its virality. To facilitate 
 the further handling of these values, we applied an ordinal encoder to map these 
 strings to binary numbers. For the categorization, we used the compound score of 
 the SentimentIntensityAnalyzer's polarity_scores function. 
 According to https://github.com/cjhutto/vaderSentiment#about-the-scoring :
->>>>>>> Stashed changes
 - positive sentiment: compound score >= 0.05
 - neutral sentiment: (compound score > -0.05) and (compound score < 0.05)
 - negative sentiment: compound score <= -0.05
+We decided against using the compound score as it is and categorizing the data
+instead to ensure a better comparibility.
 
 ### Results
 
