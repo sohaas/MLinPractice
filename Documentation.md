@@ -133,6 +133,7 @@ feature, up to you.
 Which features did you implement? What's their motivation and how are they
 computed?
 
+<<<<<<< Updated upstream
 In order to check for correlations regarding the sentiment of a tweet and its
 virality, we decided to categorize them into the three categories "positive",
 "neutral" and "negative". To facilitate the further handling of these values,
@@ -140,6 +141,40 @@ we mapped them to binary numbers ("negative"=00, "neutral"=01, "positive"=10).
 For the categorization, we used the compound score of the
 SentimentIntensityAnalyzer's polarity_scores function. According to
 https://github.com/cjhutto/vaderSentiment#about-the-scoring :
+=======
+Since it might very well be possible that English tweets are more likely to
+become viral, due to the amount of people that speak the language, we
+chose this as a feature as well. So, we used the "language" column to
+differentiate between English and non-English tweets and test for a correlation
+with the virality. The tweets were categorized using boolean values, i.e. 0 =
+non-English and 1 = English.
+
+Additionally, we included a feature extractor for checking if the inclusion of
+urls in the tweets has any incluence on the virality. For this purpose, the
+"urls" column was used to categorize the tweets, again with the help of boolean
+values, i.e. 0 = no url included and 1 = url included. We chose this as a
+feature, because when looking at the data we noticed that quite often, tweets
+contained links as invitations to events, or job oppertunities, or just some
+interesting webpage. But the point is that this way, a lot more information can
+be transferred than in a tweet without any urls and with a character limit,
+which might make the tweet more interesting and therefore more viral.
+
+Beyond the meta data of the tweets, we added the topics extracted beforehand as 
+contentwise features, because intuitively it seems obvious that there is some 
+kind of relation between the content and the virality of tweets. To not over 
+simplify the content, the topics were not summarized into one feature, but each
+transformed into an own feature. However as the creation of these topic features
+follows the same course of generation, they were created from only one feature
+extractor.  
+
+To add to the contentwise features, we decided to categorize the tweets into 
+the three categories "positive","neutral" and "negative" to check for 
+correlations regarding the sentiment of a tweet and its virality. To facilitate 
+the further handling of these values, we applied an ordinal encoder to map these 
+strings to binary numbers. For the categorization, we used the compound score of 
+the SentimentIntensityAnalyzer's polarity_scores function. 
+According to https://github.com/cjhutto/vaderSentiment#about-the-scoring :
+>>>>>>> Stashed changes
 - positive sentiment: compound score >= 0.05
 - neutral sentiment: (compound score > -0.05) and (compound score < 0.05)
 - negative sentiment: compound score <= -0.05

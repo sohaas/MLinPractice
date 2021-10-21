@@ -9,6 +9,10 @@ Created on Thu Sep 14 10:40:13 2021
 """
 
 import numpy as np
+<<<<<<< Updated upstream
+=======
+from sklearn.preprocessing import OrdinalEncoder
+>>>>>>> Stashed changes
 from code.feature_extraction.feature_extractor import FeatureExtractor
 from nltk.sentiment import SentimentIntensityAnalyzer
 
@@ -38,7 +42,17 @@ class SentimentAnalyzer(FeatureExtractor):
             elif compoundScore >= 0.05: 
                 sentiment.append(positive)
             else:          
+<<<<<<< Updated upstream
                 sentiment.append(neutral)
+=======
+                sentiment.append("neutral")
+            
+        # ordinal encoding
+        features = np.array(sentiment) 
+        features = features.reshape(-1,1)
+        encoder = OrdinalEncoder()
+        encoder.fit(features)
+>>>>>>> Stashed changes
         
         result = np.array(sentiment)
         result = result.reshape(-1,1)
