@@ -1,0 +1,15 @@
+artifact_uri: data/classification/mlflow/0/b5e8bf3d4353499f87705b89ac9c2d9b/artifacts
+end_time: 1634902952853
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: b5e8bf3d4353499f87705b89ac9c2d9b
+run_uuid: b5e8bf3d4353499f87705b89ac9c2d9b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1634902871562
+status: 3
+tags: []
+user_id: tjweber
