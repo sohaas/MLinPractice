@@ -88,6 +88,7 @@ else:   # manually set up a classifier
         params = {"classifier": "knn", "k": args.knn}
         standardizer = StandardScaler()
         knn_classifier = KNeighborsClassifier(n_neighbors=args.knn, n_jobs = -1)
+        print("hello hello")
         classifier = make_pipeline(standardizer, knn_classifier)
         
     elif args.rf is not None:

@@ -26,6 +26,7 @@ class TopicExtractor(Preprocessor):
     def _set_variables(self, inputs):
         self.tweets = inputs[0]
         self.labels = inputs[1]
+        self.tweets_lim = inputs[0][:10000]
     
     # get preprocessed column based on data frame and internal variables
     def _get_values(self, inputs, df):
@@ -59,11 +60,11 @@ class TopicExtractor(Preprocessor):
     # get frequent words with high tf-idf score    
     def _get_freq_words(self):
         vectorizer = TfidfVectorizer(lowercase=False)
-        tf_idf_vectors = vectorizer.fit_transform(self.tweets).todense()
+        tf_idf_vectors = vectorizer.fit_transform(self.tweets_lim).todense()
     
         # store words with highest tf_idf scores
         freq_words = []
-        for i in range(0,len(self.tweets)): 
+        for i in range(0,len(self.tweets_lim)): 
             if self.labels[i] == True:
                 idx_highest = np.argmax(tf_idf_vectors[i])
                 freq_words.append(vectorizer.get_feature_names()[idx_highest])
