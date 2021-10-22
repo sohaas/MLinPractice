@@ -121,7 +121,7 @@ evaluation_metrics = []
 if args.accuracy:
     evaluation_metrics.append(("accuracy", accuracy_score))
 if args.kappa:
-    evaluation_metrics.append(("Cohens kappa", cohen_kappa_score))
+    evaluation_metrics.append(("Cohen_kappa", cohen_kappa_score))
 if args.fbeta:
     evaluation_metrics.append(("F-beta score", fbeta_score))
 if args.sensitivity:
