@@ -9,7 +9,7 @@ Created on Thu Sep 14 10:40:13 2021
 """
 
 import numpy as np
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OrdinalEncoder
 from code.feature_extraction.feature_extractor import FeatureExtractor
 from nltk.sentiment import SentimentIntensityAnalyzer
 
@@ -36,11 +36,11 @@ class SentimentAnalyzer(FeatureExtractor):
                 sentiment.append("positive")
             else:          
                 sentiment.append("neutral")
-        
-        # one hot encoding
+            
+        # ordinal encoding
         features = np.array(sentiment) 
         features = features.reshape(-1,1)
-        encoder = OneHotEncoder(sparse = False)
+        encoder = OrdinalEncoder()
         encoder.fit(features)
         
         return encoder.transform(features)
