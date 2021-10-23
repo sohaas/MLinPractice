@@ -1,0 +1,11 @@
+
+Created on Sat Oct 23 10:42:11 2021
+
+@author: tjweber
+
+
+
+Overview mlflow runs
+
+- bayes_test = test run for bayes classifier with var_smoothing and priors
+- bayes = hyperparameter optimization for bayes classifier (var_smooting, priors)

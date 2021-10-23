@@ -17,7 +17,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import make_pipeline
-from mlflow import log_metric, log_param, set_tracking_uri
+from mlflow import log_metric, log_param, set_tracking_uri, start_run, end_run
 
 # setting up CLI
 parser = argparse.ArgumentParser(description = "Classifier")
@@ -27,7 +27,7 @@ parser.add_argument("-e", "--export_file", help = "export the trained classifier
 parser.add_argument("-i", "--import_file", help = "import a trained classifier from the given location", default = None)
 parser.add_argument("-m", "--majority", action = "store_true", help = "majority class classifier")
 parser.add_argument("-f", "--frequency", action = "store_true", help = "label frequency classifier")
-parser.add_argument("-b", "--bayes", action = "store_true", help = "gaussian naive bayes classifier")
+parser.add_argument("-b", "--bayes", nargs = '+', type = float, help = "gaussian naive bayes classifier")
 parser.add_argument("--knn", type = int, help = "k nearest neighbor classifier with the specified value of k", default = None)
 parser.add_argument("--rf", type = int, help = "random forest classifier", default = None)
 parser.add_argument("--svm", type = str, help = "support vector machine classifier", default = None)
@@ -36,6 +36,7 @@ parser.add_argument("-k", "--kappa", action = "store_true", help = "evaluate usi
 parser.add_argument("-fb", "--fbeta", action = "store_true", help = "evaluate using F-beta score")
 parser.add_argument("-se", "--sensitivity", action = "store_true", help = "evaluate using sensitivity")
 parser.add_argument("--log_folder", help = "where to log the mlflow results", default = "data/classification/mlflow")
+parser.add_argument("--run_name", type = str, help = "name of mlflow run", default = None)
 args = parser.parse_args()
 
 # load data
@@ -43,11 +44,15 @@ with open(args.input_file, 'rb') as f_in:
     data = pickle.load(f_in)
 
 set_tracking_uri(args.log_folder)
+if args.run_name is not None:
+    start_run(run_name=args.run_name)
+else:
+    start_run()
 
 if args.import_file is not None:
     # import a pre-trained classifier
     with open(args.import_file, 'rb') as f_in:
-        input_dict = pickle.load(f_in)
+        input_dict = pickle.load(f_in)         
     
     classifier = input_dict["classifier"]
     for param, value in input_dict["params"].items():
@@ -71,13 +76,15 @@ else:   # manually set up a classifier
         params = {"classifier": "frequency"}
         classifier = DummyClassifier(strategy = "stratified", random_state = args.seed)
         
-    elif args.bayes:
+    elif args.bayes is not None:
         # gaussian naive bayes classifier
         print("    gaussian naive bayes classifier")
         log_param("classifier", "bayes")
-        params = {"classifier": "bayes"}
+        log_param("priors", args.bayes[:2])
+        log_param("var_smoothing", args.bayes[2])
+        params = {"classifier": "bayes", "priors": args.bayes[:2], "var_smoothing": args.bayes[2]}
         standardizer = StandardScaler()
-        bayes_classifier = GaussianNB()
+        bayes_classifier = GaussianNB(priors=args.bayes[:2], var_smoothing=args.bayes[2])
         classifier = make_pipeline(standardizer, bayes_classifier)
     
     elif args.knn is not None:
@@ -146,3 +153,5 @@ if args.export_file is not None:
     output_dict = {"classifier": classifier, "params": params}
     with open(args.export_file, 'wb') as f_out:
         pickle.dump(output_dict, f_out)
+        
+end_run()
