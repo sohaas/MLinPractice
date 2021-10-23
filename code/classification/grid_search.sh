@@ -29,7 +29,7 @@ then
     for k in $values_of_k
     do
         echo $k
-        $cmd 'data/classification/clf_'"$k"'.pickle' --knn $k -s 42 --accuracy --kappa --fbeta --sensitivity
+        $cmd 'data/classification/clf_'"$k"'.pickle' --knn $k -s 42 --accuracy --kappa --fbeta --sensitivity --run_name knn
     done
 elif [ $2 = bayes ]
 then

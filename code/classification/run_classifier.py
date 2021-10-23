@@ -27,7 +27,7 @@ parser.add_argument("-e", "--export_file", help = "export the trained classifier
 parser.add_argument("-i", "--import_file", help = "import a trained classifier from the given location", default = None)
 parser.add_argument("-m", "--majority", action = "store_true", help = "majority class classifier")
 parser.add_argument("-f", "--frequency", action = "store_true", help = "label frequency classifier")
-parser.add_argument("-b", "--bayes", nargs = '+', type = float, help = "gaussian naive bayes classifier")
+parser.add_argument("-b", "--bayes", nargs = '*', type = float, help = "gaussian naive bayes classifier")
 parser.add_argument("--knn", type = int, help = "k nearest neighbor classifier with the specified value of k", default = None)
 parser.add_argument("--rf", type = int, help = "random forest classifier", default = None)
 parser.add_argument("--svm", type = str, help = "support vector machine classifier", default = None)
@@ -80,11 +80,9 @@ else:   # manually set up a classifier
         # gaussian naive bayes classifier
         print("    gaussian naive bayes classifier")
         log_param("classifier", "bayes")
-        log_param("priors", args.bayes[:2])
-        log_param("var_smoothing", args.bayes[2])
-        params = {"classifier": "bayes", "priors": args.bayes[:2], "var_smoothing": args.bayes[2]}
+        params = {"classifier": "bayes"}
         standardizer = StandardScaler()
-        bayes_classifier = GaussianNB(priors=args.bayes[:2], var_smoothing=args.bayes[2])
+        bayes_classifier = GaussianNB()
         classifier = make_pipeline(standardizer, bayes_classifier)
     
     elif args.knn is not None:
@@ -95,7 +93,6 @@ else:   # manually set up a classifier
         params = {"classifier": "knn", "k": args.knn}
         standardizer = StandardScaler()
         knn_classifier = KNeighborsClassifier(n_neighbors=args.knn, n_jobs = -1)
-        print("hello hello")
         classifier = make_pipeline(standardizer, knn_classifier)
         
     elif args.rf is not None:
