@@ -1,0 +1,15 @@
+artifact_uri: data/classification/mlruns/0/71f421d97ae3462b941175869dbe140a/artifacts
+end_time: 1635267022933
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: 71f421d97ae3462b941175869dbe140a
+run_uuid: 71f421d97ae3462b941175869dbe140a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1635267021183
+status: 3
+tags: []
+user_id: tjweber
