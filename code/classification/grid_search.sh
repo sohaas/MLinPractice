@@ -56,7 +56,7 @@ then
             for c in $values_of_classweight
             do 
                 echo $m $t $c
-                $cmd 'data/classification/clf_'"$m"'_'"$t"'_'"$c"'.pickle' --rf $t $m --rf_cw $c -s 42 --accuracy --kappa --fbeta --sensitivity --run_name rf_test_all
+                $cmd 'data/classification/clf_'"$m"'_'"$t"'_'"$c"'.pickle' --rf $t $m --rf_cw $c -s 42 --accuracy --kappa --fbeta --sensitivity --run_name rf
             done
         done
     done
