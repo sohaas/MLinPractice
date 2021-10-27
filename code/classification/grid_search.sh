@@ -9,7 +9,7 @@ values_of_var_smooth=("1e-01 1e-02 1e-03 1e-04 1e-05 1e-06 1e-07 1e-08 1e-09")
 values_of_trees=("32 33 34 35 36 37 38 39 40 48 56 64")
 values_of_classweight=("balanced balanced_subsample")
 values_of_kernel=("linear poly rbf sigmoid")
-values_of_cweight=( [1]=1 [1]=5 [1]=10 [1]=50 [1]=100 )
+declare -A values_of_cweight=([1.0]=1.0 [1.01]=5.0 [1.02]=10.0 [1.03]=50.0 [1.04]=100.0 )
 
 
 # different execution modes

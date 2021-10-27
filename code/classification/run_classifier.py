@@ -31,7 +31,7 @@ parser.add_argument("-b", "--bayes", action = "store_true", help = "gaussian nai
 parser.add_argument("--knn", type = int, help = "k nearest neighbor classifier with the specified value of k", default = None)
 parser.add_argument("--rf", type = int, help = "random forest classifier with the specified number of trees", default = None)
 parser.add_argument("--rf_cw", type = str, help = "class weight for random forest classifier", default = None)
-parser.add_argument("--svm", nargs='*', type = int, help = "support vector machine classifier", default = None)
+parser.add_argument("--svm", nargs='*', type = float, help = "support vector machine classifier", default = None)
 parser.add_argument("--kernel", type = str, help = "support vector machine classifier", default = None)
 parser.add_argument("-a", "--accuracy", action = "store_true", help = "evaluate using accuracy")
 parser.add_argument("-k", "--kappa", action = "store_true", help = "evaluate using Cohen's kappa")
@@ -116,7 +116,7 @@ else:   # manually set up a classifier
         log_param("class weights", args.svm)
         params = {"classifier": "svm", "kernel": args.kernel, "c weights": args.svm}
         standardizer = StandardScaler()
-        svm_classifier = svm.SVC(kernel=args.kernel, class_weight=args.svm)
+        svm_classifier = svm.SVC(kernel=args.kernel, class_weight={0:args.svm[0], 1:args.svm[1]})
         classifier = make_pipeline(standardizer, svm_classifier)
     
     classifier.fit(data["features"], data["labels"].ravel())
