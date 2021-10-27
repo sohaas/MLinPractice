@@ -27,10 +27,10 @@ parser.add_argument("-e", "--export_file", help = "export the trained classifier
 parser.add_argument("-i", "--import_file", help = "import a trained classifier from the given location", default = None)
 parser.add_argument("-m", "--majority", action = "store_true", help = "majority class classifier")
 parser.add_argument("-f", "--frequency", action = "store_true", help = "label frequency classifier")
-parser.add_argument("-b", "--bayes", nargs = '*', type = float, help = "gaussian naive bayes classifier")
+parser.add_argument("-b", "--bayes", action = "store_true", help = "gaussian naive bayes classifier")
 parser.add_argument("--knn", type = int, help = "k nearest neighbor classifier with the specified value of k", default = None)
-parser.add_argument("--rf", nargs = '*', type = int, help = "random forest classifier", default = None)
-parser.add_argument("--rf_cw", type = str, help = "random forest classifier", default = None)
+parser.add_argument("--rf", type = int, help = "random forest classifier with the specified number of trees", default = None)
+parser.add_argument("--rf_cw", type = str, help = "class weight for random forest classifier", default = None)
 parser.add_argument("--svm", type = str, help = "support vector machine classifier", default = None)
 parser.add_argument("-a", "--accuracy", action = "store_true", help = "evaluate using accuracy")
 parser.add_argument("-k", "--kappa", action = "store_true", help = "evaluate using Cohen's kappa")
@@ -98,14 +98,13 @@ else:   # manually set up a classifier
         
     elif args.rf is not None:
         # random forest classifier
-        print("    random forest classifier with {0} trees and a max depth of {1}: {2}".format(args.rf[0], args.rf[1], args.rf_cw))
+        print("    random forest classifier with {0} trees: {1}".format(args.rf, args.rf_cw))
         log_param("classifier", "rf")
-        log_param("trees", args.rf[0])
-        log_param("max_depth", args.rf[1])
+        log_param("trees", args.rf)
         log_param("class_weight", args.rf_cw)
-        params = {"classifier": "rf", "trees": args.rf[0], "max_depth": args.rf[1], "class_weight": args.rf_cw}
+        params = {"classifier": "rf", "trees": args.rf, "class_weight": args.rf_cw}
         standardizer = StandardScaler()
-        rf_classifier = RandomForestClassifier(n_estimators=args.rf[0], max_depth=args.rf[1], class_weight=args.rf_cw, n_jobs = -1)
+        rf_classifier = RandomForestClassifier(n_estimators=args.rf, class_weight=args.rf_cw, n_jobs = -1)
         classifier = make_pipeline(standardizer, rf_classifier)
         
     elif args.svm == "linear" or args.svm == "polynomial" or args.svm == "rbf" or args.svm == "sigmoid":
