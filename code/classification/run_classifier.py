@@ -77,7 +77,7 @@ else:   # manually set up a classifier
         params = {"classifier": "frequency"}
         classifier = DummyClassifier(strategy = "stratified", random_state = args.seed)
         
-    elif args.bayes is not None:
+    elif args.bayes:
         # gaussian naive bayes classifier
         print("    gaussian naive bayes classifier")
         log_param("classifier", "bayes")
