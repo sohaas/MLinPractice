@@ -31,7 +31,8 @@ parser.add_argument("-b", "--bayes", action = "store_true", help = "gaussian nai
 parser.add_argument("--knn", type = int, help = "k nearest neighbor classifier with the specified value of k", default = None)
 parser.add_argument("--rf", type = int, help = "random forest classifier with the specified number of trees", default = None)
 parser.add_argument("--rf_cw", type = str, help = "class weight for random forest classifier", default = None)
-parser.add_argument("--svm", type = str, help = "support vector machine classifier", default = None)
+parser.add_argument("--svm", nargs='*', type = int, help = "support vector machine classifier", default = None)
+parser.add_argument("-k", "--kernel", type = str, help = "support vector machine classifier", default = None)
 parser.add_argument("-a", "--accuracy", action = "store_true", help = "evaluate using accuracy")
 parser.add_argument("-k", "--kappa", action = "store_true", help = "evaluate using Cohen's kappa")
 parser.add_argument("-fb", "--fbeta", action = "store_true", help = "evaluate using F-beta score")
@@ -107,14 +108,15 @@ else:   # manually set up a classifier
         rf_classifier = RandomForestClassifier(n_estimators=args.rf, class_weight=args.rf_cw, n_jobs = -1)
         classifier = make_pipeline(standardizer, rf_classifier)
         
-    elif args.svm == "linear" or args.svm == "polynomial" or args.svm == "rbf" or args.svm == "sigmoid":
+    elif args.kernel == "linear" or args.svm == "polynomial" or args.svm == "rbf" or args.svm == "sigmoid":
         # support vector machine classifier
-        print("    support vector machine classifier with {0} kernel".format(args.svm))
+        print("    support vector machine classifier with {0} kernel and class weights [{1}, {2}]".format(args.kernel, args.svm[0], args.svm[1]))
         log_param("classifier", "svm")
-        log_param("kernel", args.svm)
-        params = {"classifier": "svm", "kernel": args.svm}
+        log_param("kernel", args.kernel)
+        log_param("class weights", args.svm)
+        params = {"classifier": "svm", "kernel": args.kernel, "c weights": args.svm}
         standardizer = StandardScaler()
-        svm_classifier = svm.SVC(kernel=args.svm)
+        svm_classifier = svm.SVC(kernel=args.kernel, class_weight=args.svm)
         classifier = make_pipeline(standardizer, svm_classifier)
     
     classifier.fit(data["features"], data["labels"].ravel())

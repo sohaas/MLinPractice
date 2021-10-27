@@ -8,6 +8,8 @@ declare -A values_of_priors=( [0.5]=0.5 [0.6]=0.4 [0.7]=0.3 [0.8]=0.2 [0.9]=0.1)
 values_of_var_smooth=("1e-01 1e-02 1e-03 1e-04 1e-05 1e-06 1e-07 1e-08 1e-09")
 values_of_trees=("32 33 34 35 36 37 38 39 40 48 56 64")
 values_of_classweight=("balanced balanced_subsample")
+values_of_kernel=("linear poly rbf sigmoid")
+values_of_cweight=( [1]=1 [1]=5 [1]=10 [1]=50 [1]=100 )
 
 
 # different execution modes
@@ -54,6 +56,18 @@ then
         do
             echo $t $c
             $cmd 'data/classification/clf_'"$t"'_'"$c"'.pickle' --rf $t --rf_cw $c -s 42 --accuracy --kappa --fbeta --sensitivity --run_name rf
+        done
+    done
+elif [ $2 = svm ]
+then
+    for kernel in $values_of_kernel
+    echo $kernel
+    do
+        for cw_1 in "${!values_of_cweight[@]}"
+        do
+            cw_2=${values_of_cweight[$cw_1]}
+            echo [$cw_1, $cw_2]
+            $cmd 'data/classification/clf_'"$cw_1"'_'"$cw_2"'_'"$kernel"'.pickle' --svm $cw_1 $cw_2 --kernel $kernel -s 42 --accuracy --kappa --fbeta --sensitivity --run_name svm
         done
     done
 else
