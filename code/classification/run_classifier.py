@@ -32,7 +32,7 @@ parser.add_argument("--knn", type = int, help = "k nearest neighbor classifier w
 parser.add_argument("--rf", type = int, help = "random forest classifier with the specified number of trees", default = None)
 parser.add_argument("--rf_cw", type = str, help = "class weight for random forest classifier", default = None)
 parser.add_argument("--svm", nargs='*', type = int, help = "support vector machine classifier", default = None)
-parser.add_argument("-k", "--kernel", type = str, help = "support vector machine classifier", default = None)
+parser.add_argument("--kernel", type = str, help = "support vector machine classifier", default = None)
 parser.add_argument("-a", "--accuracy", action = "store_true", help = "evaluate using accuracy")
 parser.add_argument("-k", "--kappa", action = "store_true", help = "evaluate using Cohen's kappa")
 parser.add_argument("-fb", "--fbeta", action = "store_true", help = "evaluate using F-beta score")
