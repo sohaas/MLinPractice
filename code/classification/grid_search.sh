@@ -61,8 +61,8 @@ then
 elif [ $2 = svm ]
 then
     for kernel in $values_of_kernel
-    echo $kernel
     do
+        echo $kernel
         for cw_1 in "${!values_of_cweight[@]}"
         do
             cw_2=${values_of_cweight[$cw_1]}
