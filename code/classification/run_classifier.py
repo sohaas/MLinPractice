@@ -107,8 +107,8 @@ else:   # manually set up a classifier
         standardizer = StandardScaler()
         rf_classifier = RandomForestClassifier(n_estimators=args.rf, class_weight=args.rf_cw, n_jobs = -1)
         classifier = make_pipeline(standardizer, rf_classifier)
-        
-    elif args.kernel == "linear" or args.svm == "polynomial" or args.svm == "rbf" or args.svm == "sigmoid":
+
+    elif args.svm == "linear" or args.svm == "poly" or args.svm == "rbf" or args.svm == "sigmoid":
         # support vector machine classifier
         print("    support vector machine classifier with {0} kernel and class weights [{1}, {2}]".format(args.kernel, args.svm[0], args.svm[1]))
         log_param("classifier", "svm")

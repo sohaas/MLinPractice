@@ -243,6 +243,26 @@ Which features are the most important ones and why may that be the case?
 Which classifier(s) did you use? Which hyperparameter(s) (with their respective
 candidate values) did you look at? What were your reasons for this?
 
+Mindset: Try as many algorithms as possible to get the best performance (within 
+reason of course).
+Quickly name characteristics of the data that are relevant for the choice of
+classifier (e.g. imbalanced, limited dimensionality, etc.)
+
+As the k-nearest-neighbour classification was a given from the course session, 
+we will not address its pros and cons here, but rather discuss them in 
+combination with the evaluation. However, critical to its performance are mainly
+the value of k and the distance measure that is used. The default metric for 
+determining the distance of the data points is the "euclidean distance". As the
+data was not particularly high in dimensionality and mostly noise-free (?!!),
+we decided to the euclidean default to be sufficient. Instead, we focused on 
+the values for k and did a hyperparameter grid search for values ranging from 
+1 to 10. The performance leveled-out at k = 3, which we fixed as our final 
+value. This is additionally ideal int that it is an odd number, ensuring that 
+class assignment is not disrupted by a balanced class distribution of the k 
+nearest neighbors.
+
+
+
 ### Results
 
 The big finale begins: What are the evaluation results you obtained with your
