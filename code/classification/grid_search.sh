@@ -5,7 +5,7 @@ mkdir -p data/classification
 # specify hyperparameter values
 values_of_k=("1 2 3 4 5 6 7 8 9 10")
 declare -A values_of_priors=( [0.5]=0.5 [0.6]=0.4 [0.7]=0.3 [0.8]=0.2 [0.9]=0.1)
-values_of_var_smooth=("1e-01 1e-02 1e-03 1e-04 1e-05 1e-06 1e-07 1e-08 1e-09")
+values_of_alpha=("0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0")
 values_of_trees=("32 33 34 35 36 37 38 39 40 48 56 64")
 values_of_classweight=("balanced balanced_subsample")
 values_of_kernel=("linear poly rbf sigmoid")
@@ -42,10 +42,10 @@ then
     do
         p_2=${values_of_priors[$p_1]}
         echo [$p_1, $p_2]
-            for v in $values_of_var_smooth
+            for a in $values_of_alpha
             do
-                echo $v
-                $cmd 'data/classification/clf_'"$p_1"'_'"$p_2"'_'"$v"'.pickle' --bayes $p_1 $p_2 $v -s 42 --accuracy --kappa --fbeta --sensitivity --run_name bayes
+                echo $a
+                $cmd 'data/classification/clf_'"$p_1"'_'"$p_2"'_'"$a"'.pickle' --bayes $p_1 $p_2 $a -s 42 --accuracy --kappa --fbeta --sensitivity --run_name catbayes
             done
     done
 elif [ $2 = rf ]

@@ -13,7 +13,7 @@ from sklearn.dummy import DummyClassifier
 from sklearn.metrics import accuracy_score, cohen_kappa_score, fbeta_score, classification_report
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import CategoricalNB
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import make_pipeline
@@ -27,7 +27,7 @@ parser.add_argument("-e", "--export_file", help = "export the trained classifier
 parser.add_argument("-i", "--import_file", help = "import a trained classifier from the given location", default = None)
 parser.add_argument("-m", "--majority", action = "store_true", help = "majority class classifier")
 parser.add_argument("-f", "--frequency", action = "store_true", help = "label frequency classifier")
-parser.add_argument("-b", "--bayes", action = "store_true", help = "gaussian naive bayes classifier")
+parser.add_argument("-b", "--bayes", nargs='*', type=float, help = "gaussian naive bayes classifier")
 parser.add_argument("--knn", type = int, help = "k nearest neighbor classifier with the specified value of k", default = None)
 parser.add_argument("--rf", type = int, help = "random forest classifier with the specified number of trees", default = None)
 parser.add_argument("--rf_cw", type = str, help = "class weight for random forest classifier", default = None)
@@ -79,13 +79,15 @@ else:   # manually set up a classifier
         params = {"classifier": "frequency"}
         classifier = DummyClassifier(strategy = "stratified", random_state = args.seed)
         
-    elif args.bayes:
+    elif args.bayes is not None:
         # gaussian naive bayes classifier
         print("    gaussian naive bayes classifier")
         log_param("classifier", "bayes")
-        params = {"classifier": "bayes"}
+        log_param("alpha", args.bayes[2])
+        log_param("priors", args.bayes[:2])
+        params = {"classifier": "bayes", "alpha": args.bayes[2], "priors": args.bayes[:2]}
         standardizer = StandardScaler()
-        bayes_classifier = GaussianNB()
+        bayes_classifier = CategoricalNB(alpha=args.bayes[2], class_prior=args.bayes[:2])
         classifier = make_pipeline(standardizer, bayes_classifier)
     
     elif args.knn is not None:
@@ -110,7 +112,6 @@ else:   # manually set up a classifier
         classifier = make_pipeline(standardizer, rf_classifier)
         
     elif args.kernel == "linear" or args.kernel == "poly" or args.kernel == "rbf" or args.kernel == "sigmoid":
-        print("helloooo")
         # support vector machine classifier
         print("    support vector machine classifier with {0} kernel and class weights [{1}, {2}]".format(args.kernel, args.svm[0], args.svm[1]))
         log_param("classifier", "svm")
