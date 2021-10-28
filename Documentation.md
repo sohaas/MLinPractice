@@ -254,13 +254,102 @@ combination with the evaluation. However, critical to its performance are mainly
 the value of k and the distance measure that is used. The default metric for 
 determining the distance of the data points is the "euclidean distance". As the
 data was not particularly high in dimensionality and mostly noise-free (?!!),
-we decided to the euclidean default to be sufficient. Instead, we focused on 
+we decided the euclidean default to be sufficient. Instead, we focused on 
 the values for k and did a hyperparameter grid search for values ranging from 
 1 to 10. The performance leveled-out at k = 3, which we fixed as our final 
-value. This is additionally ideal int that it is an odd number, ensuring that 
+value. This is additionally ideal in that it is an odd number, ensuring that 
 class assignment is not disrupted by a balanced class distribution of the k 
 nearest neighbors.
 
+In addition to the knn classifier we decided to implement a support vector 
+machine for our classification. Support vector machines are known to be 
+effective models for binary classifications, although by default, that is only
+true for balanced data. For imbalanced data, the margin favors the majority 
+class which then affects especially the prediction of the minority class
+negatively. This, however, can be prevented by linking the softness of the 
+margin (controlled by the regularization parameter C) to given class weights, 
+allowing more misclassifications on the side of the minority class then for the
+majority class (mediated through the strength of the penalty). We implemented 
+this modification of the support vector machine, called cost-sensitive support
+vector machine by using the class-weights parameter of sklearn's svm classifier. 
+To us, the most essential design choices on the hyperparameters were first the 
+class weights for said compensation of the class imbalance, and second, which 
+kernel should be used. As we had no pre-knowledge on which kernel could work 
+best we ran a paramter search with all four possibilities (linear, polynomial,
+radial-basis function and sigmoid). This was combined with the search for 
+class weights to see which kernel would perform best under the compensated 
+class distribution conditions. For the class weights, we considered weightings
+of 1:1 for reference, 1:5 and 1:10, because they are close to the inverse class
+distribution of roughly 1:9 which tends to work well, and 1:50 and 1:100 for
+exloration purposes. As could be expected, the class weightings of 1:5 and 1:10
+yielded the best overall results across all kernels. Although the stronger 
+weightings lead to a higher improvement in the fbeta-score and sensitivity, 
+the accuracy dropped dramatically from 90.8% to 9.2%, showing that higher 
+prediction rates for the viral tweets required lots of misclassifications of the
+majority class. In consideration of these results, we chose a class weighting 
+of 1:10. 
+Regarding the kernel, performance did not differ between the different 
+possibilities, which is why we settled for the simplest and most computationally
+cheap option, the linear kernel. This also spared us the need for further kernel
+specific hyperparameter optimization, as needed (or at least useful) for all 
+other kernel types. 
+To add to our parameter search, the optimization of the global C-value could 
+further improve performance. However, we refrained from doing so because of
+time-issues.
+
+Thirdly, we decided to implement the categorical naive Bayes classifier, as it 
+excells mostly in classification tasks on text data. This is due to the fact, 
+that text-related features often comply with the assumption of independence, 
+especially when working with bag-of-words types of features. Although our 
+features are not as independent, we thought it to be worth a try. 
+As most other classifiers, the categoricalNB does by default not work best with
+imbalanced data. This can be circumvated by giving prior class probabilities. 
+In this case, the priors are not updated to mirror the class distribution of the
+data, but stick to the given probabilites. By giving a higher prior probability 
+to the minority class, the classifier is less likely to only predict the major 
+class based on the high prior probability. We considered priors ranging from 
+[0.5, 0.5] (strongly shifted prior probabilities) to [0.9, 0.1] (priors
+according to the data).
+Beyond the imbalance corrections, the main hyperparameter of the naive bayes 
+classifier is alpha, which corresponds to the value used for smoothing. As 
+neither very high nor very low values seemed to affect the performance during 
+testing, we used values ranging from near to 0 to 1 (= default) to test it in 
+combination with the different prior values.
+The hyperparameter search revealed alpha to be still uneffective, while shifting
+the prior class distributions in favor of the minority class improved the 
+performance slightly. How much the priors where shifted beyond the actual 
+distribution did not seem to matter, which is why we decided on prior 
+probabilites of 0.8/0.2. Concerning alpha, we went with the default, as there 
+was no effect on the performance.
+
+At this point, we had already implemented most of sklearn's recommendations for
+a dataset with less than 100 samples, leaving only ensemble classifiers. We 
+decided to explore this last option with a random forest classifier. Similar to 
+the support vector machine, it is susceptible to skewed data, as there is a
+certain probability for the bootstrap samples to contain only few or even no 
+instances of the minority class (= viral tweets). Parallel to the support 
+vector machine, that can be compensated for by passing pre-defined class weights
+to the classifier, which are applied by stronger penalizing the misclassifications
+of the minority class. This modification is then referred to as weighted random
+forest. To explore the class weighting, we drew on the heuristics provided by 
+sklearn, which use the inverse class distribution either globally for all 
+trees ("balanced") or dpending on the tree-specific distributions 
+("balanced_subsample").
+Beyond the class weighting, we thought the number of trees to be most critical 
+to the classifier's performance. As more trees tend to yield a better performance 
+while being computationally considerably more expensive, we decided to explore
+values up to 300. This allowed us to check where the performance leveled out, 
+and make choices based on computational means only after if necessary. 
+Lastly, restricting the depth of trees can have a positive effect on the 
+performance, especially in the case of overfitting. Although there seemed to be
+no effect on the performance, we included some moderate depth restrictions (8 
+to 32) in our grid search, in case the effect would only show once the 
+imbalance of the data was corrected.
+The grid search, however, showed both the depth limit and the kind of class 
+weighting not to be effective. Instead, the perfomance was dependent on the 
+number of trees, where 32 was the turning point for the improvemnt. Considering
+that, we chose our random forest classifier to have 32 trees and a global class
+weighting, but no limit of tree depth.
 
 
 ### Results
