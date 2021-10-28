@@ -45,6 +45,7 @@ args = parser.parse_args()
 with open(args.input_file, 'rb') as f_in:
     data = pickle.load(f_in)
 
+
 set_tracking_uri(args.log_folder)
 if args.run_name is not None:
     start_run(run_name=args.run_name)
@@ -107,8 +108,9 @@ else:   # manually set up a classifier
         standardizer = StandardScaler()
         rf_classifier = RandomForestClassifier(n_estimators=args.rf, class_weight=args.rf_cw, n_jobs = -1)
         classifier = make_pipeline(standardizer, rf_classifier)
-
-    elif args.svm == "linear" or args.svm == "poly" or args.svm == "rbf" or args.svm == "sigmoid":
+        
+    elif args.kernel == "linear" or args.kernel == "poly" or args.kernel == "rbf" or args.kernel == "sigmoid":
+        print("helloooo")
         # support vector machine classifier
         print("    support vector machine classifier with {0} kernel and class weights [{1}, {2}]".format(args.kernel, args.svm[0], args.svm[1]))
         log_param("classifier", "svm")
