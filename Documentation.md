@@ -41,7 +41,7 @@ The Beta parameter, which determines the weighting of recall and precision
 within the score, was initially set to 1. After we had adjusted most of the 
 classifiers to slightly favor the minority by allowing more misclassifications,
 we decided to mirror that in the evaluation by slightly favoring the recall 
-over the precision (beta = ?).
+over the precision (beta = 1.2).
 
 #### Sensitivity 
 The sensitivity refers to the true positive rate and summarizes how well the 
