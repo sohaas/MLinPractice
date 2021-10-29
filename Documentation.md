@@ -180,9 +180,9 @@ follows the same course of generation, they were created from only one feature
 extractor.  
 
 To add to the contentwise features, we decided to categorize the tweets into 
-the three categories "positive","neutral" and "negative" to check for 
+the three categories "positive", "neutral" and "negative" to check for 
 correlations regarding the sentiment of a tweet and its virality. To facilitate 
-the further handling of these values, we applied one hot encoding to map these 
+the further handling of these values, we applied an ordinal encoder to map these 
 strings to binary numbers. For the categorization, we used the compound score of 
 the SentimentIntensityAnalyzer's polarity_scores function. 
 According to https://github.com/cjhutto/vaderSentiment#about-the-scoring :

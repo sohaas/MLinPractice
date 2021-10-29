@@ -115,6 +115,8 @@ The file `output.pickle` will be used to store the results of the dimensionality
 
 The dimensionality reduction method to be applied can be configured with the following optional parameters:
 - `-m` or `--mutual_information`: Select the `k` best features (where `k` is given as argument) with the Mutual Information criterion
+- `-r` or `--recursive`: Select the `n` best features (where `n` is given as argument) with recursive feature elimination using a logistic regression model
+- `-s` or `--select_from_model`: Select maximally `n` features (where `n` is given as argument) from random forest classifier
 
 Moreover, the script support importing and exporting fitted dimensionality reduction techniques with the following optional arguments:
 - `-i` or `--import_file`: Load a configured and fitted dimensionality reduction technique from the given pickle file. Ignore all parameters that configure the dimensionality reduction technique.
