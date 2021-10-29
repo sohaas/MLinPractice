@@ -40,6 +40,7 @@ class TopicExtractor(Preprocessor):
         if len(ordered) > 10:
             ordered = ordered[:10]
         topics = self._get_topics(ordered)
+        print(topics)
              
         # search each tweet for topics and store
         features = np.full((len(self.tweets), len(topics)), False, dtype=bool)
@@ -59,15 +60,23 @@ class TopicExtractor(Preprocessor):
     # get frequent words with high tf-idf score    
     def _get_freq_words(self):
         vectorizer = TfidfVectorizer(lowercase=False)
-        tf_idf_vectors = vectorizer.fit_transform(self.tweets).todense()
-    
-        # store words with highest tf_idf scores
+        tf_idf_vectors = vectorizer.fit_transform(self.tweets[:10000]).todense()
+        
+        # add index column to dataframe
+        frame = { 'tweets': self.tweets[:10000], 'labels': self.labels[:10000] } 
+        df_new = pd.DataFrame(frame)
+        df_new["index"] = range(0, len(self.tweets[:10000]))
+         
+        # get entries labeled as True
+        df_new = df_new.loc[df_new['labels'] == True]
+         
+        # store words with highest tf_idf scores 
         freq_words = []
-        for i in range(0,len(self.tweets)): 
-            if self.labels[i] == True:
-                idx_highest = np.argmax(tf_idf_vectors[i])
-                freq_words.append(vectorizer.get_feature_names()[idx_highest])
+        for i in range(0, df_new.shape[0]):
+            idx_highest = np.argmax(tf_idf_vectors[df_new.index[i]])
+            freq_words.append(vectorizer.get_feature_names()[idx_highest])
         return freq_words
+    
     
     # get synonyms of word from wordnet 
     def _get_synonyms(self, word):
