@@ -216,7 +216,29 @@ TODO: Can we already guess which features may be more useful than others?
 
 ### Design Decisions
 
-TODO: Which dimensionality reduction technique(s) did you pick and why?
+For the dimensionality reduction, we decided against projection based techniques
+like PCA, because we were curious about which features would turn out to be 
+relevant. Instead, we implemented three different types of selection based 
+methods and compared both the subsets of selected features and the classification
+performance based on those. In the end, we chose the method which yielded the 
+best performance. 
+As it is usually not known beforehand how many of the extracted features are 
+relevant to the classification, the normal procedure is to test out different 
+values for the size of the feature subsets. However, as this would have taken 
+additional time, we decided to skip this step and go with a reasonable number of 
+5 features for all methods. 
+
+The first method that we imlemented is the recursive feature reduction from the 
+class of the wrapper methods. To decide which features are selected it draws on
+an internal estimator model, that can be chosen. However, as the choice of the
+estimator seems not to be that critical to the quality of the feature selection 
+process, we decided to go with the linear regression model from the course 
+session without further deliberating other possibilities. 
+Additionally, we chose the 5 best features based on both the mutual information 
+algorithm and a random forest classifier, so that we had a technique from all of 
+the subclasses of the selection based methods. We decided against a search of
+hyerparameters for the respective models, as this would have been time-consuming
+and seemingly not as relevant to the performance.
 
 ### Results
 
