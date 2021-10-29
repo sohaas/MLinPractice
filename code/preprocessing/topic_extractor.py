@@ -40,7 +40,6 @@ class TopicExtractor(Preprocessor):
         if len(ordered) > 10:
             ordered = ordered[:10]
         topics = self._get_topics(ordered)
-        print(topics)
              
         # search each tweet for topics and store
         features = np.full((len(self.tweets), len(topics)), False, dtype=bool)
@@ -60,12 +59,12 @@ class TopicExtractor(Preprocessor):
     # get frequent words with high tf-idf score    
     def _get_freq_words(self):
         vectorizer = TfidfVectorizer(lowercase=False)
-        tf_idf_vectors = vectorizer.fit_transform(self.tweets[:10000]).todense()
+        tf_idf_vectors = vectorizer.fit_transform(self.tweets).todense()
         
         # add index column to dataframe
-        frame = { 'tweets': self.tweets[:10000], 'labels': self.labels[:10000] } 
+        frame = { 'tweets': self.tweets, 'labels': self.labels } 
         df_new = pd.DataFrame(frame)
-        df_new["index"] = range(0, len(self.tweets[:10000]))
+        df_new["index"] = range(0, len(self.tweets))
          
         # get entries labeled as True
         df_new = df_new.loc[df_new['labels'] == True]
