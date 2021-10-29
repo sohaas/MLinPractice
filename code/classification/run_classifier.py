@@ -132,7 +132,7 @@ if args.sensitivity:
 # compute and print them
 for metric_name, metric in evaluation_metrics:
     if metric_name == "F-beta score":
-        metric_value = metric(data["labels"], prediction, beta=1)
+        metric_value = metric(data["labels"], prediction, beta=1.2)
     elif metric_name == "sensitivity":
         metric_value = metric
     else:
