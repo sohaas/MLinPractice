@@ -12,29 +12,42 @@ import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 
-df = pd.read_csv("data/preprocessing/preprocessed.csv", quoting = csv.QUOTE_NONNUMERIC, lineterminator = "\n")
+df = pd.read_csv("data/preprocessing/preprocessed.csv",
+                 quoting = csv.QUOTE_NONNUMERIC, lineterminator = "\n")
+
 
 with open("data/feature_extraction/training.pickle", "rb") as f_in:
     data = pickle.load(f_in)
 
-features = data["features"]
-labels = np.squeeze(data["labels"])
+    features = data["features"]
+    labels = np.squeeze(data["labels"])
+
+def get_features(column):
+    feature = features[:, column]
+    # viral tweets
+    pos = feature[labels]
+    # non-viral tweets
+    neg_index = np.array([not x for x in labels])
+    neg = feature[neg_index]
+    return [feature, pos, neg]
+
+def plot_pie(is_viral, labels, title):
+    unique, counts = np.unique(is_viral, return_counts = True)
+    plt.pie(counts, labels = labels, explode = [0.2, 0], autopct = "%.1f%%")
+    plt.title(title)
+    plt.show()
+    return
 
 
 # character length plots
-feature = features[:, 0]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(0)
 
-plt.hist(feature, range = [0,400])
+plt.hist(feature[0], range = [0,400])
 plt.title("Character Count Feature")
 plt.xlabel("Characters")
 plt.ylabel("Tweets")
 
-plt.hist([pos, neg], range = [0,400], alpha=0.5, label = ["Viral", "Non-Viral"])
+plt.hist([feature[1], feature[2]], range = [0,400], label = ["Viral", "Non-Viral"])
 plt.legend(loc='upper right')
 plt.title("Characters Viral vs Non-Viral Tweets")
 plt.xlabel("Characters")
@@ -42,111 +55,55 @@ plt.ylabel("Tweets")
 
 
 # tfIdf: topic probability
-feature = features[:, 1]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(1)
+
+plot_pie(feature[0], ["Not mentioned", "Mentioned"], "Topic Feature: 'Probability'")
+plot_pie(feature[1], ["Not mentioned", "Mentioned"], "'Probability': Viral Tweets")
+plot_pie(feature[2], ["Not mentioned", "Mentioned"], "'Probability': Non-Viral Tweets")
 
 
 # tfIdf: topic picture
-feature = features[:, 2]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(2)
 
 
 # tfIdf: topic amp
-feature = features[:, 3]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(3)
 
 
 # tfIdf: topic schools
-feature = features[:, 4]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(4)
 
 
 # tfIdf: topic vaccine
-feature = features[:, 5]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(5)
 
 
 # tfIdf: topic eda
-feature = features[:, 6]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(6)
 
 
 # tfIdf: topic odsc
-feature = features[:, 7]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(7)
 
 
 # tfIdf: topic graph
-feature = features[:, 8]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(8)
 
 
 # tfIdf: topic rstudio
-feature = features[:, 9]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(9)
 
 
 # tfIdf: topic cheat
-feature = features[:, 10]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(10)
 
 
 # sentiment plots
-feature = features[:, 11]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(11)
 
 
 # language plots
-feature = features[:, 12]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(12)
 
 count = df["language"].value_counts()
 plot = count.plot(kind = "bar", logy = True, title = "Language Count", figsize = (15,5))
@@ -166,26 +123,21 @@ count = df["language"].groupby(df["language"] == "en").count()
 plot = count.plot(kind = 'pie', title = "English vs not English Count", figsize = (5,5))
 plot.set_ylabel("Is English")
 
-unique, counts = np.unique(feature, return_counts = True)
+unique, counts = np.unique(feature[0], return_counts = True)
 plt.pie(counts, labels = ["Not English", "English"], explode = [0.2, 0], autopct = "%.1f%%")
 plt.title("Language Feature")
 plt.show()
 
-unique, counts = np.unique(pos, return_counts = True)
+unique, counts = np.unique(feature[1], return_counts = True)
 plt.pie(counts, labels = ["Not English", "English"], explode = [0.2, 0], autopct = "%.1f%%")
 plt.title("Language Viral Tweets")
 plt.show()
 
-unique, counts = np.unique(neg, return_counts = True)
+unique, counts = np.unique(feature[2], return_counts = True)
 plt.pie(counts, labels = ["Not English", "English"], explode = [0.2, 0], autopct = "%.1f%%")
 plt.title("Language Non-Viral Tweets")
 plt.show()
 
 
 # url  plots
-feature = features[:, 13]
-# viral tweets
-pos = feature[labels]
-# non-viral tweets
-neg_index = np.array([not x for x in labels])
-neg = feature[neg_index]
+feature = get_features(13)
