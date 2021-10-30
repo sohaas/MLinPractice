@@ -140,9 +140,12 @@ plot_pie(feature[2], topicLabels, "'Cheat': Non-Viral Tweets", explode2d)
 # sentiment plots
 feature = get_features(11)
 
-plot_pie(feature[0], ["Negative", "Neutral", "Positive"], "Sentiment Feature", [0.2, 0, 0])
-plot_pie(feature[1], ["Negative", "Neutral", "Positive"], "Sentiment Viral Tweets", [0.2, 0, 0])
-plot_pie(feature[2], ["Negative", "Neutral", "Positive"], "Sentiment Non-Viral Tweets", [0.2, 0, 0])
+plot_pie(feature[0], ["Negative", "Neutral", "Positive"],
+         "Sentiment Feature", [0.2, 0, 0])
+plot_pie(feature[1], ["Negative", "Neutral", "Positive"],
+         "Sentiment Viral Tweets", [0.2, 0, 0])
+plot_pie(feature[2], ["Negative", "Neutral", "Positive"],
+         "Sentiment Non-Viral Tweets", [0.2, 0, 0])
 
 
 # language plots
@@ -166,21 +169,14 @@ count = df["language"].groupby(df["language"] == "en").count()
 plot = count.plot(kind = 'pie', title = "English vs not English Count", figsize = (5,5))
 plot.set_ylabel("Is English")
 
-unique, counts = np.unique(feature[0], return_counts = True)
-plt.pie(counts, labels = ["Not English", "English"], explode = [0.2, 0], autopct = "%.1f%%")
-plt.title("Language Feature")
-plt.show()
-
-unique, counts = np.unique(feature[1], return_counts = True)
-plt.pie(counts, labels = ["Not English", "English"], explode = [0.2, 0], autopct = "%.1f%%")
-plt.title("Language Viral Tweets")
-plt.show()
-
-unique, counts = np.unique(feature[2], return_counts = True)
-plt.pie(counts, labels = ["Not English", "English"], explode = [0.2, 0], autopct = "%.1f%%")
-plt.title("Language Non-Viral Tweets")
-plt.show()
+plot_pie(feature[0], ["Other", "English"], "Language Feature", explode2d)
+plot_pie(feature[1], ["Other", "English"], "Language Viral Tweets", explode2d)
+plot_pie(feature[2], ["Other", "English"], "Language Non-Viral Tweets", explode2d)
 
 
 # url  plots
 feature = get_features(13)
+
+plot_pie(feature[0], ["W/o URL", "With URL"], "URL Feature", explode2d)
+plot_pie(feature[1], ["W/o URL", "With URL"], "URL Viral Tweets", explode2d)
+plot_pie(feature[2], ["W/o URL", "With URL"], "URL Non-Viral Tweets", explode2d)
