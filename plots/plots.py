@@ -20,6 +20,7 @@ with open("data/feature_extraction/training.pickle", "rb") as f_in:
 features = data["features"]
 labels = np.squeeze(data["labels"])
 
+
 # character length plots
 feature = features[:, 0]
 # viral tweets
@@ -28,7 +29,17 @@ pos = feature[labels]
 neg_index = np.array([not x for x in labels])
 neg = feature[neg_index]
 
-# tfidf plots
+plt.hist(feature, range = [0,400])
+plt.title("Character Count Feature")
+plt.xlabel("Characters")
+plt.ylabel("Tweets")
+
+plt.hist([pos, neg], range = [0,400], alpha=0.5, label = ["Viral", "Non-Viral"])
+plt.legend(loc='upper right')
+plt.title("Characters Viral vs Non-Viral Tweets")
+plt.xlabel("Characters")
+plt.ylabel("Tweets")
+
 
 # tfIdf: topic probability
 feature = features[:, 1]
@@ -38,6 +49,7 @@ pos = feature[labels]
 neg_index = np.array([not x for x in labels])
 neg = feature[neg_index]
 
+
 # tfIdf: topic picture
 feature = features[:, 2]
 # viral tweets
@@ -45,6 +57,7 @@ pos = feature[labels]
 # non-viral tweets
 neg_index = np.array([not x for x in labels])
 neg = feature[neg_index]
+
 
 # tfIdf: topic amp
 feature = features[:, 3]
@@ -54,6 +67,7 @@ pos = feature[labels]
 neg_index = np.array([not x for x in labels])
 neg = feature[neg_index]
 
+
 # tfIdf: topic schools
 feature = features[:, 4]
 # viral tweets
@@ -61,6 +75,7 @@ pos = feature[labels]
 # non-viral tweets
 neg_index = np.array([not x for x in labels])
 neg = feature[neg_index]
+
 
 # tfIdf: topic vaccine
 feature = features[:, 5]
@@ -70,6 +85,7 @@ pos = feature[labels]
 neg_index = np.array([not x for x in labels])
 neg = feature[neg_index]
 
+
 # tfIdf: topic eda
 feature = features[:, 6]
 # viral tweets
@@ -77,6 +93,7 @@ pos = feature[labels]
 # non-viral tweets
 neg_index = np.array([not x for x in labels])
 neg = feature[neg_index]
+
 
 # tfIdf: topic odsc
 feature = features[:, 7]
@@ -86,6 +103,7 @@ pos = feature[labels]
 neg_index = np.array([not x for x in labels])
 neg = feature[neg_index]
 
+
 # tfIdf: topic graph
 feature = features[:, 8]
 # viral tweets
@@ -93,6 +111,7 @@ pos = feature[labels]
 # non-viral tweets
 neg_index = np.array([not x for x in labels])
 neg = feature[neg_index]
+
 
 # tfIdf: topic rstudio
 feature = features[:, 9]
@@ -102,6 +121,7 @@ pos = feature[labels]
 neg_index = np.array([not x for x in labels])
 neg = feature[neg_index]
 
+
 # tfIdf: topic cheat
 feature = features[:, 10]
 # viral tweets
@@ -110,6 +130,7 @@ pos = feature[labels]
 neg_index = np.array([not x for x in labels])
 neg = feature[neg_index]
 
+
 # sentiment plots
 feature = features[:, 11]
 # viral tweets
@@ -117,6 +138,7 @@ pos = feature[labels]
 # non-viral tweets
 neg_index = np.array([not x for x in labels])
 neg = feature[neg_index]
+
 
 # language plots
 feature = features[:, 12]
@@ -158,6 +180,7 @@ unique, counts = np.unique(neg, return_counts = True)
 plt.pie(counts, labels = ["Not English", "English"], explode = [0.2, 0], autopct = "%.1f%%")
 plt.title("Language Non-Viral Tweets")
 plt.show()
+
 
 # url  plots
 feature = features[:, 13]
