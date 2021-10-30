@@ -30,6 +30,7 @@ class TopicExtractor(Preprocessor):
     # get preprocessed column based on data frame and internal variables
     def _get_values(self, inputs, df):
         print("Extracting topics")
+        print("    Warning: This might take a while to process. If this is not desired, please remove --extract from line 15 in code/preprocessing.sh")
           
         # get words with highest tf_idf score
         freq_words = self._get_freq_words()
@@ -47,7 +48,10 @@ class TopicExtractor(Preprocessor):
             tweet_list = ast.literal_eval(self.tweets[i])
             for j in range(0, len(topics)):
                 if (set(tweet_list) & set(topics[j])):
-                    features[i,j] = True   
+                    features[i,j] = True
+                if i % 100 == 0:
+                    progress = round((i * 100 /  len(topics)), 3)
+                    print("    Progress: step 2/2 {0}%".format(progress), end = "\r")
          
         # return list of features
         features_list = []
@@ -74,6 +78,9 @@ class TopicExtractor(Preprocessor):
         for i in range(0, df_new.shape[0]):
             idx_highest = np.argmax(tf_idf_vectors[df_new.index[i]])
             freq_words.append(vectorizer.get_feature_names()[idx_highest])
+            if i % 100 == 0:
+                progress = round((i * 100 / df_new.shape[0]), 3)
+                print("    Progress: step 1/2 {0}%".format(progress), end = "\r")
         return freq_words
     
     
