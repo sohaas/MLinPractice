@@ -9,20 +9,18 @@ Created on Wed Oct  7 12:43:42 2021
 """
 
 from code.preprocessing.preprocessor import Preprocessor
-import nltk
 
+# converts the original tweet to lowercase
 class Lowercaser(Preprocessor):
-    """Converts the original tweet to lowercase"""
     
+    # initialize the Lowercaser with the given input and output column
     def __init__(self, input_column, output_column):
-        """Initialize the Lowercaser with the given input and output column."""
         super().__init__([input_column], output_column)
     
     # don't need to implement _set_variables()
     
+    # lowercase the tweet
     def _get_values(self, inputs, df):
-        """Lowercase the tweet."""
-        
         print("Lowercasing")
         lowercased = []
         
@@ -30,4 +28,3 @@ class Lowercaser(Preprocessor):
             lowercased.append(tweet.lower())
         
         return lowercased
-# -*- coding: utf-8 -*-

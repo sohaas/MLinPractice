@@ -22,7 +22,7 @@ class TopicExtractor(Preprocessor):
         # input column "tweet", new output column
         super().__init__([input_column[0], input_column[1]], output_column)
     
-    # don't need to implement _set_variables()
+    # store tweets and labels
     def _set_variables(self, inputs):
         self.tweets = inputs[0]
         self.labels = inputs[1]
@@ -32,7 +32,7 @@ class TopicExtractor(Preprocessor):
         print("Extracting topics")
         print("    Warning: For runtime reasons, this step is only performed ",
               "on 50.000 of the tweets. If you have 4-6h extra time and a good ",
-              "computer, feel free to remove the limitation in line 65 of ",
+              "computer, feel free to remove the limitation in line 65 of",
               "code/preprocessing/topic_extractor.py")
           
         # get words with highest tf_idf score
@@ -82,7 +82,6 @@ class TopicExtractor(Preprocessor):
             if i % 100 == 0:
                 progress = round((i * 100 / df_new.shape[0]), 3)
                 print("    Progress: {0}%".format(progress), end = "\r")
-        print("\n")
         return freq_words
     
     
@@ -104,4 +103,3 @@ class TopicExtractor(Preprocessor):
                 topics.append(list(set(topic)))
                 self._output_column.append("topic_" + word)
         return topics
-        

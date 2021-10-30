@@ -13,25 +13,23 @@ from code.preprocessing.preprocessor import Preprocessor
 from nltk.stem import SnowballStemmer
 import ast
 
+# removes the stems from the words of the given input column
 class Stemmer(Preprocessor):
-    """Removes the stems from the words of the given input column."""
     
+    # initialize the Stemmer with the given input and output column
     def __init__(self, input_column, output_column):
-        """Initialize the Stemmer with the given input and output column."""
         super().__init__(input_column, output_column)
     
     # don't need to implement _set_variables(), since no variables to set
     
-    def _get_values(self, inputs, df):
-        """Stem the tweet."""
-        
+    # stem the tweet
+    def _get_values(self, inputs, df):        
         print("Stemming")
         stemmed = []
         
         for index, value in inputs[0].items():
             tokenized_list = ast.literal_eval(value)
             stemmed_tweet = []
-            
             stemmer = self.get_stemmer(inputs[1][index])
             
             for word in tokenized_list:
@@ -45,9 +43,8 @@ class Stemmer(Preprocessor):
         
         return stemmed
 
+    # return list of stopwords in the right language
     def get_stemmer(self, language):
-        """Return list of stopwords in the right language."""
-        
         if language == "ar":
             return SnowballStemmer("arabic")
         elif language == "da":
