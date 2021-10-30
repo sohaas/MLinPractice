@@ -30,7 +30,10 @@ class TopicExtractor(Preprocessor):
     # get preprocessed column based on data frame and internal variables
     def _get_values(self, inputs, df):
         print("Extracting topics")
-        print("    Warning: This might take a while to process. If this is not desired, please remove --extract from line 15 in code/preprocessing.sh")
+        print("    Warning: For runtime reasons, this step is only performed ",
+              "on 50.000 of the tweets. If you have 4-6h extra time and a good ",
+              "computer, feel free to remove the limitation in line 65 of ",
+              "code/preprocessing/topic_extractor.py")
           
         # get words with highest tf_idf score
         freq_words = self._get_freq_words()
@@ -49,9 +52,6 @@ class TopicExtractor(Preprocessor):
             for j in range(0, len(topics)):
                 if (set(tweet_list) & set(topics[j])):
                     features[i,j] = True
-                if i % 100 == 0:
-                    progress = round((i * 100 /  len(topics)), 3)
-                    print("    Progress: step 2/2 {0}%".format(progress), end = "\r")
          
         # return list of features
         features_list = []
@@ -62,13 +62,14 @@ class TopicExtractor(Preprocessor):
     
     # get frequent words with high tf-idf score    
     def _get_freq_words(self):
+        limit = 50000
         vectorizer = TfidfVectorizer(lowercase=False)
-        tf_idf_vectors = vectorizer.fit_transform(self.tweets).todense()
+        tf_idf_vectors = vectorizer.fit_transform(self.tweets[:limit]).todense()
         
         # add index column to dataframe
-        frame = { 'tweets': self.tweets, 'labels': self.labels } 
+        frame = { 'tweets': self.tweets[:limit], 'labels': self.labels[:limit] } 
         df_new = pd.DataFrame(frame)
-        df_new["index"] = range(0, len(self.tweets))
+        df_new["index"] = range(0, len(self.tweets[:limit]))
          
         # get entries labeled as True
         df_new = df_new.loc[df_new['labels'] == True]
@@ -80,7 +81,8 @@ class TopicExtractor(Preprocessor):
             freq_words.append(vectorizer.get_feature_names()[idx_highest])
             if i % 100 == 0:
                 progress = round((i * 100 / df_new.shape[0]), 3)
-                print("    Progress: step 1/2 {0}%".format(progress), end = "\r")
+                print("    Progress: {0}%".format(progress), end = "\r")
+        print("\n")
         return freq_words
     
     

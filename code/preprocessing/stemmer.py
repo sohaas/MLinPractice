@@ -80,6 +80,3 @@ class Stemmer(Preprocessor):
             return SnowballStemmer("swedish")
         else:
             return None
-
-# -*- coding: utf-8 -*-
-
