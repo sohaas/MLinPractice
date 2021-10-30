@@ -31,9 +31,9 @@ def get_features(column):
     neg = feature[neg_index]
     return [feature, pos, neg]
 
-def plot_pie(is_viral, labels, title):
+def plot_pie(is_viral, labels, title, explode):
     unique, counts = np.unique(is_viral, return_counts = True)
-    plt.pie(counts, labels = labels, explode = [0.2, 0], autopct = "%.1f%%")
+    plt.pie(counts, labels = labels, explode = explode, autopct = "%.1f%%")
     plt.title(title)
     plt.show()
     return
@@ -53,53 +53,96 @@ plt.title("Characters Viral vs Non-Viral Tweets")
 plt.xlabel("Characters")
 plt.ylabel("Tweets")
 
+explode2d = [0.2, 0]
+topicLabels = ["Not mentioned", "Mentioned"]
+
 
 # tfIdf: topic probability
 feature = get_features(1)
 
-plot_pie(feature[0], ["Not mentioned", "Mentioned"], "Topic Feature: 'Probability'")
-plot_pie(feature[1], ["Not mentioned", "Mentioned"], "'Probability': Viral Tweets")
-plot_pie(feature[2], ["Not mentioned", "Mentioned"], "'Probability': Non-Viral Tweets")
+plot_pie(feature[0], topicLabels, "Topic Feature: 'Probability'", explode2d)
+plot_pie(feature[1], topicLabels, "'Probability': Viral Tweets", explode2d)
+plot_pie(feature[2], topicLabels, "'Probability': Non-Viral Tweets", explode2d)
 
 
 # tfIdf: topic picture
 feature = get_features(2)
 
+plot_pie(feature[0], topicLabels, "Topic Feature: 'Picture'", explode2d)
+plot_pie(feature[1], topicLabels, "'Picture': Viral Tweets", explode2d)
+plot_pie(feature[2], topicLabels, "'Picture': Non-Viral Tweets", explode2d)
+
 
 # tfIdf: topic amp
 feature = get_features(3)
+
+plot_pie(feature[0], topicLabels, "Topic Feature: 'AMP'", explode2d)
+plot_pie(feature[1], topicLabels, "'AMP': Viral Tweets", explode2d)
+plot_pie(feature[2], topicLabels, "'AMP': Non-Viral Tweets", explode2d)
 
 
 # tfIdf: topic schools
 feature = get_features(4)
 
+plot_pie(feature[0], topicLabels, "Topic Feature: 'Schools'", explode2d)
+plot_pie(feature[1], topicLabels, "'Schools': Viral Tweets", explode2d)
+plot_pie(feature[2], topicLabels, "'Schools': Non-Viral Tweets", explode2d)
+
 
 # tfIdf: topic vaccine
 feature = get_features(5)
 
+plot_pie(feature[0], topicLabels, "Topic Feature: 'Vaccine'", explode2d)
+plot_pie(feature[1], topicLabels, "'Vaccine': Viral Tweets", explode2d)
+plot_pie(feature[2], topicLabels, "'Vaccine': Non-Viral Tweets", explode2d)
 
-# tfIdf: topic eda
+
+# tfIdf: topic eda (exploratory data analysis)
 feature = get_features(6)
 
+plot_pie(feature[0], topicLabels, "Topic Feature: 'EDA'", explode2d)
+plot_pie(feature[1], topicLabels, "'EDA': Viral Tweets", explode2d)
+plot_pie(feature[2], topicLabels, "'EDA': Non-Viral Tweets", explode2d)
 
-# tfIdf: topic odsc
+
+# tfIdf: topic odsc (open data science conference)
 feature = get_features(7)
+
+plot_pie(feature[0], topicLabels, "Topic Feature: 'ODSC'", explode2d)
+plot_pie(feature[1], topicLabels, "'ODSC': Viral Tweets", explode2d)
+plot_pie(feature[2], topicLabels, "'ODSC': Non-Viral Tweets", explode2d)
 
 
 # tfIdf: topic graph
 feature = get_features(8)
 
+plot_pie(feature[0], topicLabels, "Topic Feature: 'Graph'", explode2d)
+plot_pie(feature[1], topicLabels, "'Graph': Viral Tweets", explode2d)
+plot_pie(feature[2], topicLabels, "'Graph': Non-Viral Tweets", explode2d)
+
 
 # tfIdf: topic rstudio
 feature = get_features(9)
+
+plot_pie(feature[0], topicLabels, "Topic Feature: 'Rstudio'", explode2d)
+plot_pie(feature[1], topicLabels, "'Rstudio': Viral Tweets", explode2d)
+plot_pie(feature[2], topicLabels, "'Rstudio': Non-Viral Tweets", explode2d)
 
 
 # tfIdf: topic cheat
 feature = get_features(10)
 
+plot_pie(feature[0], topicLabels, "Topic Feature: 'Cheat'", explode2d)
+plot_pie(feature[1], topicLabels, "'Cheat': Viral Tweets", explode2d)
+plot_pie(feature[2], topicLabels, "'Cheat': Non-Viral Tweets", explode2d)
+
 
 # sentiment plots
 feature = get_features(11)
+
+plot_pie(feature[0], ["Negative", "Neutral", "Positive"], "Sentiment Feature", [0.2, 0, 0])
+plot_pie(feature[1], ["Negative", "Neutral", "Positive"], "Sentiment Viral Tweets", [0.2, 0, 0])
+plot_pie(feature[2], ["Negative", "Neutral", "Positive"], "Sentiment Non-Viral Tweets", [0.2, 0, 0])
 
 
 # language plots
