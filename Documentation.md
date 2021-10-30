@@ -190,7 +190,7 @@ According to https://github.com/cjhutto/vaderSentiment#about-the-scoring :
 - neutral sentiment: (compound score > -0.05) and (compound score < 0.05)
 - negative sentiment: compound score <= -0.05
 We decided against using the compound score as it is and categorizing the data
-instead to ensure a better comparibility.
+instead to ensure a better comparability.
 
 ### Results
 

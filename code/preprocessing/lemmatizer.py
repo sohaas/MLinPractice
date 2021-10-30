@@ -13,18 +13,17 @@ from code.preprocessing.preprocessor import Preprocessor
 from nltk.stem import WordNetLemmatizer
 import ast
 
+# lemmatizes the words from the given input column into their root form
 class Lemmatizer(Preprocessor):
-    """Lemmatizes the words from the given input column into their root form."""
     
+    # initialize the Lemmatizer with the given input and output column
     def __init__(self, input_column, output_column):
-        """Initialize the Lemmatizer with the given input and output column."""
         super().__init__([input_column], output_column)
     
     # don't need to implement _set_variables(), since no variables to set
     
-    def _get_values(self, inputs, df):
-        """Lemmatize the tweet."""
-        
+    # lemmatize the tweet
+    def _get_values(self, inputs, df):        
         print("Lemmatizing")
         lemmatized = []
         lemmatizer = WordNetLemmatizer()
