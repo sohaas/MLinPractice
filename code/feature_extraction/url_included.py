@@ -25,6 +25,7 @@ class UrlIncluded(FeatureExtractor):
         
         has_url = []
         
+        # encode using binary numbers to facilitate subsequent pipeline steps
         for urls in inputs[0]:
             if urls == "[]":
                 has_url.append(0)

@@ -39,12 +39,11 @@ class EnglishLanguageTest(unittest.TestCase):
         input_df[self.INPUT_COLUMN] = [input_text]
         
         isEnglish = self.language_en.fit_transform(input_df)
-        # Non-English = 0
+        # non-English = 0
         EXPECTED_OUTPUT = [0]
         
         self.assertEqual(isEnglish, EXPECTED_OUTPUT)
         
 
 if __name__ == '__main__':
-    unittest.main()# -*- coding: utf-8 -*-
-
+    unittest.main()

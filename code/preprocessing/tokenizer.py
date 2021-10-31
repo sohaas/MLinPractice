@@ -11,18 +11,17 @@ Created on Wed Oct  6 13:59:54 2021
 from code.preprocessing.preprocessor import Preprocessor
 import nltk
 
+# tokenizes the given input column into individual words
 class Tokenizer(Preprocessor):
-    """Tokenizes the given input column into individual words."""
     
+    # initialize the Tokenizer with the given input and output column
     def __init__(self, input_column, output_column):
-        """Initialize the Tokenizer with the given input and output column."""
         super().__init__([input_column], output_column)
     
     # don't need to implement _set_variables(), since no variables to set
     
+    # tokenize the tweet
     def _get_values(self, inputs, df):
-        """Tokenize the tweet."""
-        
         print("Tokenizing")
         tokenized = []
         

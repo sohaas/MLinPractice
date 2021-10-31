@@ -12,7 +12,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 import pandas as pd
 
 # inherits from BaseEstimator (as pretty much everything in sklearn)
-#   and TransformerMixin (allowing for fit, transform, and fit_transform methods)
+# and TransformerMixin (allowing for fit, transform, and fit_transform methods)
 class Preprocessor(BaseEstimator,TransformerMixin):
     
     # constructor

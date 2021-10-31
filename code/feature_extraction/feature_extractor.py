@@ -11,8 +11,8 @@ Created on Wed Sep 29 12:22:13 2021
 from sklearn.base import BaseEstimator, TransformerMixin
 
 # base class for all feature extractors
-#   inherits from BaseEstimator (as pretty much everything in sklearn)
-#       and TransformerMixin (allowing for fit, transform, and fit_transform methods)
+# inherits from BaseEstimator (as pretty much everything in sklearn)
+# and TransformerMixin (allowing for fit, transform, and fit_transform methods)
 class FeatureExtractor(BaseEstimator,TransformerMixin):
     
     # constructor
