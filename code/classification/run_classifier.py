@@ -34,14 +34,18 @@ parser.add_argument("-m", "--majority", action = "store_true",
                     help = "majority class classifier")
 parser.add_argument("-f", "--frequency", action = "store_true",
                     help = "label frequency classifier")
-parser.add_argument("-b", "--bayes", action = "store_true",
+parser.add_argument("-b", "--bayes", nargs = "*", type = float, 
                     help = "gaussian naive bayes classifier")
 parser.add_argument("--knn", type = int,
                     help = "k nearest neighbor classifier with the specified value of k",
                     default = None)
 parser.add_argument("--rf", type = int, help = "random forest classifier",
                     default = None)
-parser.add_argument("--svm", type = str,
+parser.add_argument("--rf_cw", type = str, help = "random forest classifier",
+                    default = None)
+parser.add_argument("--svm", nargs = "*", type = int,
+                    help = "support vector machine classifier", default = None)
+parser.add_argument("--kernel", type = str,
                     help = "support vector machine classifier", default = None)
 parser.add_argument("-a", "--accuracy", action = "store_true",
                     help = "evaluate using accuracy")
@@ -61,10 +65,7 @@ with open(args.input_file, 'rb') as f_in:
 
 
 set_tracking_uri(args.log_folder)
-if args.run_name is not None:
-    start_run(run_name=args.run_name)
-else:
-    start_run()
+start_run()
 
 if args.import_file is not None:
     # import a pre-trained classifier
@@ -95,6 +96,7 @@ else:
     # categorical naive bayes classifier        
     elif args.bayes is not None:
         print("    gaussian naive bayes classifier")
+        print(args.bayes)
         log_param("classifier", "bayes")
         log_param("priors", args.bayes)
         params = {"classifier": "bayes", "priors": args.bayes}

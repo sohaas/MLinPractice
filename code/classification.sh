@@ -5,12 +5,12 @@ mkdir -p data/classification/
 
 # run classification on training set (may need to fit classifiers)
 echo "  training set"
-python -m code.classification.run_classifier data/dimensionality_reduction/training.pickle -e data/classification/classifier.pickle --knn 3 -s 42 --accuracy --kappa --fbeta --sensitivity --run_name final_test
+python -m code.classification.run_classifier data/dimensionality_reduction/training.pickle -e data/classification/classifier.pickle --knn 3 -s 42 --accuracy --kappa --fbeta --sensitivity
 
 # run classification on validation set (with pre-fit classifiers)
 echo "  validation set"
-python -m code.classification.run_classifier data/dimensionality_reduction/validation.pickle -i data/classification/classifier.pickle --accuracy --kappa --fbeta --sensitivity --run_name final_test
+python -m code.classification.run_classifier data/dimensionality_reduction/validation.pickle -i data/classification/classifier.pickle --accuracy --kappa --fbeta --sensitivity
 
 # run classification on test set (with pre-fit classifiers) 
 echo "  test set"
-python -m code.classification.run_classifier data/dimensionality_reduction/validation.pickle -i data/classification/classifier.pickle --accuracy --kappa --fbeta --sensitivity --run_name final_test
+python -m code.classification.run_classifier data/dimensionality_reduction/validation.pickle -i data/classification/classifier.pickle --accuracy --kappa --fbeta --sensitivity
