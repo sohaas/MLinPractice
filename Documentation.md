@@ -17,8 +17,64 @@ are "viral".
 In the following, the steps included in our machine learning pipeline for
 achieving this goal will be explained individually, in the form: design
 decisions, results, interpretation.
-The steps are: Preprocessing, feature extraction, dimensionality reduction,
-classification and evaluation.
+The steps are: Evaluation, preprocessing, feature extraction, dimensionality reduction,
+classification.
+
+# Evaluation
+
+## Design Decisions
+
+For the evaluation of our classifier, we chose several evaluation metrics to 
+asses the performance from different perspectives.
+In addition to the accuracy and Cohen's Kappa that were already implemented, 
+we decided to add the F Beta Score and the sensitivity. In the following, 
+we shortly explain all four of our metrics and motivate the addition of
+F Beta and Sensitivity. 
+
+### Accuracy 
+
+Accuracy is the proportion of true results among the total number of cases 
+examined. Though widely used as evaluation metric, it is not as meaningful for 
+imbalanced data. This is because classifying very stupidly will already result 
+in very high scores, purely based on the imbalanced class distribution. In 
+combination with other metrics however, it can be a good indicator for how 
+strongly trade-offs in favor of the minority class affect the overall performance. 
+
+### Cohen's Kappa
+
+Cohen's Kappa adjusts the accuracy for random agreement and is therefore much
+more robust against imbalanced class distributions, giving a clearer picture of
+the classifier's performance. In that, it is a rather strict metric, where high
+scores are hard to achieve.
+
+### F Beta Score 
+
+The F Beta Score is a value between 0 and 1, representing a tradeoff between
+precision and recall. We decided to use this evaluation metric, as we want our 
+model to catch the viral tweets (high recall) without being overly imprecise 
+(high precision). The F Beta Score allows for exactly that while also being 
+robust against the imbalance of classes in the data. 
+The Beta parameter, which determines the weighting of recall and precision
+within the score, was initially set to 1. After we had adjusted most of the 
+classifiers to slightly favor the minority by allowing more misclassifications,
+we decided to mirror that in the evaluation by slightly favoring the recall 
+over the precision (beta = 1.2).
+
+### Sensitivity 
+
+The sensitivity refers to the true positive rate and summarizes how well the 
+positive class has been predicted. In that, it is a good indicator of whether
+we achieved to train a classifier who's strategy goes beyond always predicting 
+the majority class. However, it has to be checked whether improvements in the 
+sensitivity are at the cost of the overall performance, which makes it most 
+useful in combination with the other evaluation metrics.
+
+### Baselines
+
+As baseline classifiers, both a majority vote and a label frequency classifier 
+were implemented, always, or almost always, predicting the false (non-viral) 
+class. They are especially well-suited as baselines on imbalanced data, as they
+achieve overall good results even without a sophisticated classification strategy.
 
 
 
@@ -219,16 +275,41 @@ the number of followers was not included in the given dataset.
 
 ## Results
 
-TODO: Can you say something about how the feature values are distributed? Maybe show
-some plots?
+There is an indication that tweets in another language than English are less
+likely to go viral. However, some non-English tweets are viral and generally,
+the feature is hardly significant, since overall 95% of the tweets are English.
+
+Interestingly enough, more of the viral tweets seem to have a negative sentiment
+than the non-viral tweets.
+
+Even though the topic “probability” was only mentioned in 0.5% of the tweets
+overall, it is definitely mentioned more often in viral tweets.
+
+Especially with the topic “cheat”, quite a big difference can be observed within
+the viral and the non-viral tweets.
+
+The character length in the viral tweets seems to peak in the 150 area, which
+makes sense because most tweets are of this length. However, there is another
+peak at around 300 tweets.
+
+Generally, the distribution of the feature values within the tweets is quite
+imbalanced and the differences between viral and non-viral tweets are often
+only very small.
+
+See plots/* for the feature plots.
+
 
 ## Interpretation
 
-TODO: Can we already guess which features may be more useful than others?
+The features named in the section above are the ones with the biggest difference
+between viral and non-viral tweets and therefore might be chosen in the
+dimensionality reduction.
 
 
 
 # Dimensionality Reduction
+
+The most significant features are chosen using different methods.
 
 ## Design Decisions
 
@@ -442,60 +523,4 @@ other than accuracy from 0. Beyond that, the performance is still not sufficient
 for a real application, especially as the minority class is predicted badly.
 
 
-
-# Evaluation
-
-## Design Decisions
-
-For the evaluation of our classifier, we chose several evaluation metrics to 
-asses the performance from different perspectives.
-In addition to the accuracy and Cohen's Kappa that were already implemented, 
-we decided to add the F Beta Score and the sensitivity. In the following, 
-we shortly explain all four of our metrics and motivate the addition of
-F Beta and Sensitivity. 
-
-### Accuracy 
-
-Accuracy is the proportion of true results among the total number of cases 
-examined. Though widely used as evaluation metric, it is not as meaningful for 
-imbalanced data. This is because classifying very stupidly will already result 
-in very high scores, purely based on the imbalanced class distribution. In 
-combination with other metrics however, it can be a good indicator for how 
-strongly trade-offs in favor of the minority class affect the overall performance. 
-
-### Cohen's Kappa
-
-Cohen's Kappa adjusts the accuracy for random agreement and is therefore much
-more robust against imbalanced class distributions, giving a clearer picture of
-the classifier's performance. In that, it is a rather strict metric, where high
-scores are hard to achieve.
-
-### F Beta Score 
-
-The F Beta Score is a value between 0 and 1, representing a tradeoff between
-precision and recall. We decided to use this evaluation metric, as we want our 
-model to catch the viral tweets (high recall) without being overly imprecise 
-(high precision). The F Beta Score allows for exactly that while also being 
-robust against the imbalance of classes in the data. 
-The Beta parameter, which determines the weighting of recall and precision
-within the score, was initially set to 1. After we had adjusted most of the 
-classifiers to slightly favor the minority by allowing more misclassifications,
-we decided to mirror that in the evaluation by slightly favoring the recall 
-over the precision (beta = 1.2).
-
-### Sensitivity 
-
-The sensitivity refers to the true positive rate and summarizes how well the 
-positive class has been predicted. In that, it is a good indicator of whether
-we achieved to train a classifier who's strategy goes beyond always predicting 
-the majority class. However, it has to be checked whether improvements in the 
-sensitivity are at the cost of the overall performance, which makes it most 
-useful in combination with the other evaluation metrics.
-
-### Baselines
-
-As baseline classifiers, both a majority vote and a label frequency classifier 
-were implemented, always, or almost always, predicting the false (non-viral) 
-class. They are especially well-suited as baselines on imbalanced data, as they
-achieve overall good results even without a sophisticated classification strategy.
 
