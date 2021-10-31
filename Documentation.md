@@ -162,40 +162,47 @@ for a much better comparibility, which might be a great addition for the future.
 
 # Feature Extraction
 
-TODOSH
+In feature extraction, the goal is to select aspects from the preprocessed data,
+that might be relevant for the prediction about a tweets virality.
+In the following, we will present which features we chose, although they can
+of course be significantly supplemented in the future.
 
 ## Design Decisions
 
+The first feature was already given: the tweet's character length. The number
+of characters in the tweets is compared to see if, e.g. tweets with less text
+are more likely to become viral.
+
 Since it might very well be possible that English tweets are more likely to
-become viral, due to the amount of people that speak the language, we
-chose this as a feature as well. So, we used the "language" column to
-differentiate between English and non-English tweets and test for a correlation
-with the virality. The tweets were categorized using boolean values, i.e. 0 =
-non-English and 1 = English.
+become viral, due to the amount of people that speak the language, we chose
+this as a feature as well. So, we used the "language" column to differentiate
+between English and non-English tweets and test for a correlation with the
+virality. The tweets were categorized using boolean values, i.e. 0 = non-English
+and 1 = English.
 
 Additionally, we included a feature extractor for checking if the inclusion of
-urls in the tweets has any incluence on the virality. For this purpose, the
+urls in the tweets has any influence on the virality. For this purpose, the
 "urls" column was used to categorize the tweets, again with the help of boolean
 values, i.e. 0 = no url included and 1 = url included. We chose this as a
 feature, because when looking at the data we noticed that quite often, tweets
 contained links as invitations to events, or job oppertunities, or just some
-interesting webpage. But the point is that this way, a lot more information can
-be transferred than in a tweet without any urls and with a character limit,
-which might make the tweet more interesting and therefore more viral.
+interesting webpage. The point is that this way, a lot more information can be
+transferred than in a tweet without any urls and with a character limit, which
+might make the tweet more interesting and therefore more likely to become viral.
 
-Beyond the meta data of the tweets, we added the topics extracted beforehand as 
-contentwise features, because intuitively it seems obvious that there is some 
-kind of relation between the content and the virality of tweets. To not over 
-simplify the content, the topics were not summarized into one feature, but each
-transformed into an own feature. However as the creation of these topic features
-follows the same course of generation, they were created from only one feature
-extractor.  
+Beyond the meta data of the tweets, we added the topics that were extracted
+beforehand as contentwise features, because intuitively it seems obvious that
+there is some kind of relation between the content and the virality of tweets.
+To not over-simplify the content, the topics were not summarized into one feature,
+but each of them was transformed into a new feature. However, as the creation of
+these topic features follows the same course of generation, they were created
+from only one feature extractor.  
 
 To add to the contentwise features, we decided to categorize the tweets into 
-the three categories "positive","neutral" and "negative" to check for 
+the three categories "positive", "neutral", and "negative" to check for 
 correlations regarding the sentiment of a tweet and its virality. To facilitate 
-the further handling of these values, we applied one hot encoding to map these 
-strings to binary numbers. For the categorization, we used the compound score of 
+the further handling of these values, we applied ordinal encoding to map these 
+strings to integer numbers. For the categorization, we used the compound score of 
 the SentimentIntensityAnalyzer's polarity_scores function. 
 According to https://github.com/cjhutto/vaderSentiment#about-the-scoring :
 - positive sentiment: compound score >= 0.05
@@ -204,20 +211,28 @@ According to https://github.com/cjhutto/vaderSentiment#about-the-scoring :
 We decided against using the compound score as it is and categorizing the data
 instead to ensure a better comparability.
 
+Another feature that could be added in the future is, e.g. the time or day of
+the tweet, suggesting that maybe tweets posted in the evening or on the weekend
+are more likely to become viral, since a lot more people are online at that time.
+Also, we would have liked to include the number of followers as a feature,
+because intuitively, it would make sense that tweets from a user with a lot of
+followers is more likely to become viral. Unfortunately, the information about
+the number of followers was not included in the given dataset.
+
 ## Results
 
-TODOSH: Can you say something about how the feature values are distributed? Maybe show
+TODO: Can you say something about how the feature values are distributed? Maybe show
 some plots?
 
 ## Interpretation
 
-TODOSH: Can we already guess which features may be more useful than others?
+TODO: Can we already guess which features may be more useful than others?
 
 
 
 # Dimensionality Reduction
 
-TODOSH
+TODO
 
 ## Design Decisions
 
@@ -239,6 +254,7 @@ an internal estimator model, that can be chosen. However, as the choice of the
 estimator seems not to be that critical to the quality of the feature selection 
 process, we decided to go with the linear regression model from the course 
 session without further deliberating other possibilities. 
+
 Additionally, we chose the 5 best features based on both the mutual information 
 algorithm and a random forest classifier, so that we had a technique from all of 
 the subclasses of the selection based methods. We decided against a search of
@@ -247,18 +263,36 @@ and seemingly not as relevant to the performance.
 
 ## Results
 
-TODOSH: Which features were selected / created? Do you have any scores to report?
+In the following, the ranking of the following features by the different
+dimensionality reduction methods will be presented:
+character length, topic 'probability', topic 'picture', topic 'amp',
+topic 'schools', topic 'vaccine', topic 'eda', topic 'odsc', topic 'graph',
+topic 'rstudio', topic 'cheat', tweet sentiment, is English, contains URL.
+
+Using recursive feature reduction with logistic regression and n = 5, the
+features were ranked as follows: [10  1  6  7  5  1  1  3  4  1  1  8  2  9]
+
+Using select k-best with mutual information and k = 5, the features were scored
+as follows: [0.01277848 0.00211505 0. 0.0002013 0. 0.000209 0. 0.00032074
+0.00059257 0.00190219 0.01693771 0.0338219 0.02298115]
+
+Using select from model with random forest classifier and n = 5, the features
+were scored as follows: [0.80410777 0.01440323 0.01334473 0.01923457 0.00970767
+0.00867778 0.00351008 0.00575276 0.00764929 0.00463982 0.04128009 0.03689061
+0.01324583 0.01755577]
+
+TODO: Which features were selected?
 
 ## Interpretation
 
-TODOSH: Can we somehow make sense of the dimensionality reduction results?
+TODO: Can we somehow make sense of the dimensionality reduction results?
 Which features are the most important ones and why may that be the case?
 
 
 
 # Classification
 
-TODOSH
+TODO
 
 ## Design Decisions
 
