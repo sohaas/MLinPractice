@@ -76,6 +76,31 @@ were implemented, always, or almost always, predicting the false (non-viral)
 class. They are especially well-suited as baselines on imbalanced data, as they
 achieve overall good results even without a sophisticated classification strategy.
 
+The results looked as follows.
+
+Label frequency classifier:
+- Training set
+accuracy:0.8345672334719358
+Cohens kappa: 0.00434550374920617
+F-beta score: 0.09531384689302376
+sensitivity:0.09499263622974963
+- Validation set
+accuracy:0.8327642743653021
+Cohens kappa: -0.0047810404786590155
+F-beta score: 0.08723454431114551
+sensitivity:0.08707658321060383
+
+Majority vote classifier:
+- Training set
+accuracy:0.9081843074946756
+Cohens kappa: 0.0
+F-beta score: 0.0
+sensitivity: 0.0
+- Validation set
+accuracy:0.9081843074946756
+Cohens kappa: 0.0
+F-beta score: 0.0
+sensitivity: 0.0
 
 
 # Preprocessing
@@ -486,31 +511,56 @@ weighting, but no limit of tree depth.
 
 In the following, you can see the results from our classifiers.
 
-Support Vector Machine Training Set:
-Accuracy: 0.66
-Cohen's kappa: 0.0746
-F-Beta: 0.2327
-Sensitivity: 0.4925
+Support vector machine classifier with [1, 10] kernel:
+- Training set
+accuracy:0.6567222203441399
+Cohen_kappa:0.07455980436412368
+F-beta score: 0.23272271977738596
+sensitivity:0.49251350024545903
+- Validation set
+accuracy:0.6533078665359522
+Cohen_kappa:0.06755193523388336
+F-beta score: 0.2261808382432661
+sensitivity:0.4797496318114875
+- Test set
+accuracy:0.6533078665359522
+Cohen_kappa:0.06755193523388336
+F-beta score: 0.2261808382432661
+sensitivity:0.4797496318114875
 
-Support Vector Machine Test Set:
-Accuracy: 0.65
-Cohen's kappa: 0.0675
-F-Beta: 0.2262
-Sensitivity: 0.4797
+Random forest classifier with 32 trees:
+- Training set
+accuracy:0.6211025094937066
+Cohen_kappa:0.11155038909977877
+F-beta score: 0.27644963940104283
+sensitivity:0.6689985272459499
+- Validation set
+accuracy:0.609479057503127
+Cohen_kappa:0.08676761504410024
+F-beta score: 0.2528160885226979
+sensitivity:0.6134020618556701
+- Test set
+accuracy:0.609479057503127
+Cohen_kappa:0.08676761504410024
+F-beta score: 0.2528160885226979
+sensitivity:0.6134020618556701
 
-
-Random Forest Training Set:
-Accuracy: 0.66
-Cohen's kappa: 0.0746
-F-Beta: 0.2327
-Sensitivity: 0.4925
-
-Random Forest Test Set:
-Accuracy: 0.65
-Cohen's kappa: 0.0675
-F-Beta: 0.2262
-Sensitivity: 0.4797
-
+3 nearest neighbor classifier:
+- Training set
+accuracy:0.8877657956120483
+Cohen_kappa:0.05194075457503222
+F-beta score: 0.08978245168632773
+sensitivity:0.06602847324496809
+- Validation set
+accuracy:0.8842331226124878
+Cohen_kappa:0.03020099440645474
+F-beta score: 0.07206377786920974
+sensitivity:0.053387334315169364
+- Test set
+accuracy:0.8842331226124878
+Cohen_kappa:0.03020099440645474
+F-beta score: 0.07206377786920974
+sensitivity:0.053387334315169364
 
 As neither the performance on the training set, nor the performance on the test
 set was very good, we induce that our models are underfitted and would have 
