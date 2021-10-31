@@ -263,47 +263,42 @@ and seemingly not as relevant to the performance.
 
 To decide on one of the methods, we went through all three of them and classified
 with all classifiers on the respective feature subsets and compared the performance.
+This showed that the RFE method worked best with regard to the accuracy and 
+cohen's kappa, whereas the mutual information heuristic performed best with 
+regard to the f-beta score and the sensitivity. We decided to go with the mutual
+information method, as both f-beta and sensitivity favor the correct prediction
+of the minority class which we wanted to prioritize, especially as the 
+differences in accuracy and cohen's kappa were minimal.
 
-In the following, the ranking of the following features by the different
-dimensionality reduction methods will be presented:
-character length, topic 'probability', topic 'picture', topic 'amp',
-topic 'schools', topic 'vaccine', topic 'eda', topic 'odsc', topic 'graph',
-topic 'rstudio', topic 'cheat', tweet sentiment, is English, contains URL.
+Concerning the features, that were selected by the three methods, there were 
+considerable differences between the three methods. The recursive feature 
+elimination produced a subset containing the features, topic probability, topic
+vaccine, topic eda, topic rstudio and topic cheat. Quite differently, the mutual
+information algorithm selected the features is English, contains URL, tweet 
+sentiment, character length, topic probability, ranked in that order. Lastly, 
+the random forest chose character length, topic cheat, tweet sentiment, topic 
+amp and contains URL as imortant features.
 
-Using recursive feature reduction with logistic regression and n = 5, the
-features were ranked as follows: [10  1  6  7  5  1  1  3  4  1  1  8  2  9]
-
-Using select k-best with mutual information and k = 5, the features were scored
-as follows: [0.01277848 0.00211505 0. 0.0002013 0. 0.000209 0. 0.00032074
-0.00059257 0.00190219 0.01693771 0.0338219 0.02298115]
-
-Using select from model with random forest classifier and n = 5, the features
-were scored as follows: [0.80410777 0.01440323 0.01334473 0.01923457 0.00970767
-0.00867778 0.00351008 0.00575276 0.00764929 0.00463982 0.04128009 0.03689061
-0.01324583 0.01755577]
-
-TODO: Which features were selected?
 
 ## Interpretation
 
-TODO: Can we somehow make sense of the dimensionality reduction results?
-Which features are the most important ones and why may that be the case?
-
+When looking at the resulting feature sets, it seems like the three dimensionality
+reduction methods had very different strategies. While the RFE only selected topics
+as features, the mutual information algorithms chose more meta features, and the
+random forest was a mix of both. 
+From the topics, only "probability" and "cheat" were selected twice, which 
+indicates them to be the most distinguishing subject with regard to virality. 
+From the meta data, character length, and tweet sentiment were selected more 
+than once, showing that not only the content, but also the meta information
+plays an important role in the question of virality.
 
 
 # Classification
 
-TODO
-
 ## Design Decisions
 
-TODO: Which classifier(s) did you use? Which hyperparameter(s) (with their respective
-candidate values) did you look at? What were your reasons for this?
-TODO: Quickly name characteristics of the data that are relevant for the choice of
-classifier (e.g. imbalanced, limited dimensionality, etc.)
-
-Mindset: Try as many algorithms as possible to get the best performance (within 
-reason of course).
+Our mindset was to try multiple algorithms as possible to get the best performance 
+(within reason of course).
 
 As the k-nearest-neighbour classification was a given from the course session, 
 we will not address its pros and cons here, but rather discuss them in 
@@ -410,15 +405,43 @@ weighting, but no limit of tree depth.
 
 ## Results
 
-TODO: The big finale begins: What are the evaluation results you obtained with your
-classifiers in the different setups? Do you overfit or underfit? For the best
-selected setup: How well does it generalize to the test set?
+In the following, you can see the results from our classifiers.
+
+Support Vector Machine Training Set:
+Accuracy: 0.66
+Cohen's kappa: 0.0746
+F-Beta: 0.2327
+Sensitivity: 0.4925
+
+Support Vector Machine Test Set:
+Accuracy: 0.65
+Cohen's kappa: 0.0675
+F-Beta: 0.2262
+Sensitivity: 0.4797
+
+
+Random Forest Training Set:
+Accuracy: 0.66
+Cohen's kappa: 0.0746
+F-Beta: 0.2327
+Sensitivity: 0.4925
+
+Random Forest Test Set:
+Accuracy: 0.65
+Cohen's kappa: 0.0675
+F-Beta: 0.2262
+Sensitivity: 0.4797
+
+
+As neither the performance on the training set, nor the performance on the test
+set was very good, we induce that our models are underfitted and would have 
+needed more or better features for a better performance.
 
 ## Interpretation
 
-TODO: Which hyperparameter settings are how important for the results?
-How good are we? Can this be used in practice or are we still too bad?
-Anything else we may have learned?
+Most important were the adjustments for the imbalanced data, pushing the scores 
+other than accuracy from 0. Beyond that, the performance is still not sufficient
+for a real application, especially as the minority class is predicted badly.
 
 
 
