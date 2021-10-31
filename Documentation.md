@@ -221,18 +221,41 @@ the number of followers was not included in the given dataset.
 
 ## Results
 
-TODO: Can you say something about how the feature values are distributed? Maybe show
-some plots?
+There is an indication that tweets in another language than English are less
+likely to go viral. However, some non-English tweets are viral and generally,
+the feature is hardly significant, since overall 95% of the tweets are English.
+
+Interestingly enough, more of the viral tweets seem to have a negative sentiment
+than the non-viral tweets.
+
+Even though the topic “probability” was only mentioned in 0.5% of the tweets
+overall, it is definitely mentioned more often in viral tweets.
+
+Especially with the topic “cheat”, quite a big difference can be observed within
+the viral and the non-viral tweets.
+
+The character length in the viral tweets seems to peak in the 150 area, which
+makes sense because most tweets are of this length. However, there is another
+peak at around 300 tweets.
+
+Generally, the distribution of the feature values within the tweets is quite
+imbalanced and the differences between viral and non-viral tweets are often
+only very small.
+
+See plots/* for the feature plots.
+
 
 ## Interpretation
 
-TODO: Can we already guess which features may be more useful than others?
+The features named in the section above are the ones with the biggest difference
+between viral and non-viral tweets and therefore might be chosen in the
+dimensionality reduction.
 
 
 
 # Dimensionality Reduction
 
-TODO
+The most significant features are chosen using different methods.
 
 ## Design Decisions
 
