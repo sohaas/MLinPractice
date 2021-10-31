@@ -261,6 +261,9 @@ and seemingly not as relevant to the performance.
 
 ## Results
 
+To decide on one of the methods, we went through all three of them and classified
+with all classifiers on the respective feature subsets and compared the performance.
+
 In the following, the ranking of the following features by the different
 dimensionality reduction methods will be presented:
 character length, topic 'probability', topic 'picture', topic 'amp',
