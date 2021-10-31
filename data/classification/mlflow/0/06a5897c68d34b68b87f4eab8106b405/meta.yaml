@@ -1,0 +1,15 @@
+artifact_uri: data/classification/mlruns/0/06a5897c68d34b68b87f4eab8106b405/artifacts
+end_time: 1634972395136
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: deleted
+name: ''
+run_id: 06a5897c68d34b68b87f4eab8106b405
+run_uuid: 06a5897c68d34b68b87f4eab8106b405
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1634972394977
+status: 3
+tags: []
+user_id: ml
