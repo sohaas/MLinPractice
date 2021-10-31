@@ -162,6 +162,9 @@ plot.set_xlabel("Language w/o EN")
 plot.set_ylabel("Count")
 
 count = df.loc[df["language"]!="en", "language"].value_counts()
+other = count.loc[count.values < 200]
+count = count.drop(other.index)
+count = count.append(pd.Series({"other": other.sum()}))
 plot = count.plot(kind = 'pie', title = "Language Count without EN", figsize = (5,5))
 plot.set_ylabel("Language w/o EN")
 
