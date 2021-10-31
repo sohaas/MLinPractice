@@ -24,7 +24,7 @@ from code.util import (COLUMN_TWEET, COLUMN_LANGUAGE, COLUMN_TWEET_TOKENS,
                       COLUMN_NO_LINKS, COLUMN_NO_PUNCT, COLUMN_LOWERCASE,
                       COLUMN_NO_STOP, COLUMN_LABEL, SUFFIX_NO_PUNCTUATION,
                       SUFFIX_LOWERCASED, SUFFIX_TOKENIZED, SUFFIX_LEMMATIZED,
-                      SUFFIX_STEMMED, SUFFIX_NO_STOPWORDS)
+                      SUFFIX_STEMMED, SUFFIX_NO_STOPWORDS, SUFFIX__NO_LINKS)
 
 # setting up CLI
 parser = argparse.ArgumentParser(description = "Various preprocessing steps")
@@ -38,7 +38,7 @@ parser.add_argument("-li", "--links", action = "store_true", help = "remove link
 parser.add_argument("--links_input", help = "input column used for links", default = COLUMN_TWEET)
 parser.add_argument("-p", "--punctuation", action = "store_true", help = "remove punctuation")
 parser.add_argument("--punctuation_input", help = "input column used for punctuation",
-                    default = COLUMN_TWEET)
+                    default = COLUMN_NO_LINKS)
 parser.add_argument("-l", "--lowercase", action = "store_true", help = "convert to lowercase")
 parser.add_argument("--lowercase_input", help = "input column used for lowercasing",
                     default = COLUMN_NO_PUNCT)
@@ -75,9 +75,11 @@ if args.handle_values:
     preprocessors.append(ValueHandler(args.handle_values_input, None))
 if args.links:
     preprocessors.append(LinksRemover(args.links_input, COLUMN_NO_LINKS))
-if args.punctuation:
+# only allow punctuation remover to be applied to "_no_links" columns
+if args.punctuation and args.punctuation_input.endswith(SUFFIX__NO_LINKS):
     preprocessors.append(PunctuationRemover(args.punctuation_input,
-                                            args.punctuation_input + SUFFIX_NO_PUNCTUATION))
+                                    args.punctuation_input.partition(SUFFIX__NO_LINKS)[0]
+                                    + SUFFIX_NO_PUNCTUATION))
 # only allow lowercasing to be applied to "_no_punctuation" columns
 if args.lowercase and args.lowercase_input.endswith(SUFFIX_NO_PUNCTUATION):
     preprocessors.append(Lowercaser(args.lowercase_input,

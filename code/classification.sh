@@ -5,7 +5,8 @@ mkdir -p data/classification/
 
 # run classification on training set (may need to fit classifiers)
 echo "  training set"
-python -m code.classification.run_classifier data/dimensionality_reduction/training.pickle -e data/classification/classifier.pickle --svm 1 10 --kernel linear -s 42 --accuracy --kappa --fbeta --sensitivity
+python -m code.classification.run_classifier data/dimensionality_reduction/training.pickle -e data/classification/classifier.pickle --bayes 0.8 0.2 -s 42 --accuracy --kappa --fbeta --sensitivity
+
 
 # run classification on validation set (with pre-fit classifiers)
 echo "  validation set"

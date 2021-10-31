@@ -105,7 +105,7 @@ plot_pie(feature[1], topicLabels, "'EDA': Viral Tweets", explode2d)
 plot_pie(feature[2], topicLabels, "'EDA': Non-Viral Tweets", explode2d)
 
 
-# tfIdf: topic odsc (open data science conference)
+# tfIdf: topic odsc (open data science)
 feature = get_features(7)
 
 plot_pie(feature[0], topicLabels, "Topic Feature: 'ODSC'", explode2d)
