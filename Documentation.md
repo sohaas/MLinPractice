@@ -7,7 +7,6 @@ Initial goal: "Predict viral tweets"
 TODO: Elaborate a bit more
 
 ## Evaluation
-TODO: Review and improve
 
 ### Design Decisions
 For the evaluation of our classifier, we chose several evaluation metrics to 
@@ -155,11 +154,6 @@ to have a higher comparability of connected wordforms, but unfortunately did not
 have enough time to figure out how that would work with wordnet.
 
 ### Results
-
-TODO: Maybe show a short example what your preprocessing does.
-
-
-
 
 ## Feature Extraction
 
