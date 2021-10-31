@@ -15,10 +15,14 @@ from code.util import COLUMN_TWEET
 
 # setting up CLI
 parser = argparse.ArgumentParser(description = "Application")
-parser.add_argument("preprocessing_file", help = "path to the pickle file containing the preprocessing")
-parser.add_argument("feature_file", help = "path to the pickle file containing the feature extraction")
-parser.add_argument("dim_red_file", help = "path to the pickle file containing the dimensionality reduction")
-parser.add_argument("classifier_file", help = "path to the pickle file containing the classifier")
+parser.add_argument("preprocessing_file",
+                    help = "path to the pickle file containing the preprocessing")
+parser.add_argument("feature_file",
+                    help = "path to the pickle file containing the feature extraction")
+parser.add_argument("dim_red_file",
+                    help = "path to the pickle file containing the dimensionality reduction")
+parser.add_argument("classifier_file",
+                    help = "path to the pickle file containing the classifier")
 args = parser.parse_args()
 
 # load all the pipeline steps
@@ -57,4 +61,3 @@ while True:
     
     print("Prediction: {0}, Confidence: {1}".format(prediction, confidence))
     print("")
-    

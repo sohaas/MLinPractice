@@ -25,6 +25,7 @@ class EnglishLanguage(FeatureExtractor):
         
         is_english = []
         
+        # encode using binary numbers to facilitate subsequent pipeline steps
         for language in inputs[0]:
             if language == "en":
                 is_english.append(1)

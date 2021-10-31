@@ -28,6 +28,7 @@ class SentimentAnalyzer(FeatureExtractor):
         sia = SentimentIntensityAnalyzer()
         sentiment = []
         
+        # categorize data to ensure a better comparability
         for tweet in inputs[0]: 
             compoundScore = sia.polarity_scores(tweet)["compound"]
             if compoundScore <= -0.05:
@@ -37,7 +38,7 @@ class SentimentAnalyzer(FeatureExtractor):
             else:          
                 sentiment.append("neutral")
             
-        # ordinal encoding
+        # ordinal encoding (binary numbers to facilitate subsequent pipeline steps)
         features = np.array(sentiment) 
         features = features.reshape(-1,1)
         encoder = OrdinalEncoder()

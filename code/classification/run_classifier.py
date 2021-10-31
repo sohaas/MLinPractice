@@ -22,23 +22,37 @@ from mlflow import log_metric, log_param, set_tracking_uri, start_run, end_run
 # setting up CLI
 parser = argparse.ArgumentParser(description = "Classifier")
 parser.add_argument("input_file", help = "path to the input pickle file")
-parser.add_argument("-s", '--seed', type = int, help = "seed for the random number generator", default = None)
-parser.add_argument("-e", "--export_file", help = "export the trained classifier to the given location", default = None)
-parser.add_argument("-i", "--import_file", help = "import a trained classifier from the given location", default = None)
-parser.add_argument("-m", "--majority", action = "store_true", help = "majority class classifier")
-parser.add_argument("-f", "--frequency", action = "store_true", help = "label frequency classifier")
-parser.add_argument("-b", "--bayes", nargs='*', type=float, help = "gaussian naive bayes classifier")
-parser.add_argument("--knn", type = int, help = "k nearest neighbor classifier with the specified value of k", default = None)
-parser.add_argument("--rf", type = int, help = "random forest classifier with the specified number of trees", default = None)
-parser.add_argument("--rf_cw", type = str, help = "class weight for random forest classifier", default = None)
-parser.add_argument("--svm", nargs='*', type = float, help = "support vector machine classifier", default = None)
-parser.add_argument("--kernel", type = str, help = "support vector machine classifier", default = None)
-parser.add_argument("-a", "--accuracy", action = "store_true", help = "evaluate using accuracy")
-parser.add_argument("-k", "--kappa", action = "store_true", help = "evaluate using Cohen's kappa")
-parser.add_argument("-fb", "--fbeta", action = "store_true", help = "evaluate using F-beta score")
-parser.add_argument("-se", "--sensitivity", action = "store_true", help = "evaluate using sensitivity")
-parser.add_argument("--log_folder", help = "where to log the mlflow results", default = "data/classification/mlflow")
-parser.add_argument("--run_name", type = str, help = "name of mlflow run", default = None)
+parser.add_argument("-s", '--seed', type = int,
+                    help = "seed for the random number generator", default = None)
+parser.add_argument("-e", "--export_file",
+                    help = "export the trained classifier to the given location",
+                    default = None)
+parser.add_argument("-i", "--import_file",
+                    help = "import a trained classifier from the given location",
+                    default = None)
+parser.add_argument("-m", "--majority", action = "store_true",
+                    help = "majority class classifier")
+parser.add_argument("-f", "--frequency", action = "store_true",
+                    help = "label frequency classifier")
+parser.add_argument("-b", "--bayes", action = "store_true",
+                    help = "gaussian naive bayes classifier")
+parser.add_argument("--knn", type = int,
+                    help = "k nearest neighbor classifier with the specified value of k",
+                    default = None)
+parser.add_argument("--rf", type = int, help = "random forest classifier",
+                    default = None)
+parser.add_argument("--svm", type = str,
+                    help = "support vector machine classifier", default = None)
+parser.add_argument("-a", "--accuracy", action = "store_true",
+                    help = "evaluate using accuracy")
+parser.add_argument("-k", "--kappa", action = "store_true",
+                    help = "evaluate using Cohen's kappa")
+parser.add_argument("-fb", "--fbeta", action = "store_true",
+                    help = "evaluate using F-beta score")
+parser.add_argument("-se", "--sensitivity", action = "store_true",
+                    help = "evaluate using sensitivity")
+parser.add_argument("--log_folder", help = "where to log the mlflow results",
+                    default = "data/classification/mlflow")
 args = parser.parse_args()
 
 # load data
@@ -63,24 +77,23 @@ if args.import_file is not None:
     
     log_param("dataset", "validation")
 
-else:   # manually set up a classifier
+# manually set up a classifier
+else:
     
+    # majority vote classifier
     if args.majority:
-        # majority vote classifier
         print("    majority vote classifier")
         log_param("classifier", "majority")
         params = {"classifier": "majority"}
         classifier = DummyClassifier(strategy = "most_frequent", random_state = args.seed)
-        
+    # label frequency classifier
     elif args.frequency:
-        # label frequency classifier
         print("    label frequency classifier")
         log_param("classifier", "frequency")
         params = {"classifier": "frequency"}
         classifier = DummyClassifier(strategy = "stratified", random_state = args.seed)
-        
+    # categorical naive bayes classifier        
     elif args.bayes is not None:
-        # gaussian naive bayes classifier
         print("    gaussian naive bayes classifier")
         log_param("classifier", "bayes")
         log_param("priors", args.bayes)
@@ -88,9 +101,8 @@ else:   # manually set up a classifier
         standardizer = StandardScaler()
         bayes_classifier = CategoricalNB(class_prior=args.bayes)
         classifier = make_pipeline(standardizer, bayes_classifier)
-    
+    # k-nearest neighbor classifier
     elif args.knn is not None:
-        # k-nearest neighbor classifier
         print("    {0} nearest neighbor classifier".format(args.knn))
         log_param("classifier", "knn")
         log_param("k", args.knn)
@@ -98,10 +110,9 @@ else:   # manually set up a classifier
         standardizer = StandardScaler()
         knn_classifier = KNeighborsClassifier(n_neighbors=args.knn, n_jobs = -1)
         classifier = make_pipeline(standardizer, knn_classifier)
-        
+    # random forest classifier
     elif args.rf is not None:
-        # random forest classifier
-        print("    random forest classifier with {0} trees: {1}".format(args.rf, args.rf_cw))
+        print("    random forest classifier with {0} trees".format(args.rf))
         log_param("classifier", "rf")
         log_param("trees", args.rf)
         log_param("class_weight", args.rf_cw)
@@ -109,10 +120,9 @@ else:   # manually set up a classifier
         standardizer = StandardScaler()
         rf_classifier = RandomForestClassifier(n_estimators=args.rf, class_weight=args.rf_cw, n_jobs = -1)
         classifier = make_pipeline(standardizer, rf_classifier)
-        
-    elif args.kernel == "linear" or args.kernel == "poly" or args.kernel == "rbf" or args.kernel == "sigmoid":
-        # support vector machine classifier
-        print("    support vector machine classifier with {0} kernel and class weights [{1}, {2}]".format(args.kernel, args.svm[0], args.svm[1]))
+    # support vector machine classifier
+    elif args.svm == "linear" or args.svm == "polynomial" or args.svm == "rbf" or args.svm == "sigmoid":
+        print("    support vector machine classifier with {0} kernel".format(args.svm))
         log_param("classifier", "svm")
         log_param("kernel", args.kernel)
         log_param("class weights", args.svm)
@@ -137,13 +147,14 @@ if args.fbeta:
     evaluation_metrics.append(("F-beta score", fbeta_score))
 if args.sensitivity:
     target_names = ["non-viral", "viral"]
-    cl_report = classification_report(data["labels"], prediction, target_names=target_names, zero_division=0, output_dict=True)
+    cl_report = classification_report(data["labels"], prediction,
+                                      target_names=target_names, zero_division=0, output_dict=True)
     evaluation_metrics.append(("sensitivity", cl_report["viral"]["recall"]))
 
 # compute and print them
 for metric_name, metric in evaluation_metrics:
     if metric_name == "F-beta score":
-        metric_value = metric(data["labels"], prediction, beta=1)
+        metric_value = metric(data["labels"], prediction, beta=1.2)
     elif metric_name == "sensitivity":
         metric_value = metric
     else:

@@ -193,19 +193,3 @@ sfm = SelectFromModel(rf, threshold = 0.1, prefit = True)
 embedded_transformed = sfm.transform(X)
 print("After transformation: ", embedded_transformed.shape, y.shape)
 print("Compare: ", X[0], embedded_transformed[0])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

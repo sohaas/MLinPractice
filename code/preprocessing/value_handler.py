@@ -8,22 +8,20 @@ Created on Thu Oct  7 16:41:29 2021
 
 from code.preprocessing.preprocessor import Preprocessor
 from code.util import COLUMNS_REMOVE
-import nltk
 
+# handles missing and faulty values in the input columns
 class ValueHandler(Preprocessor):
-    """Handles missing and faulty values in the input columns."""
     
+    # initialize the Tokenizer with the given input and output column
     def __init__(self, input_column, output_column):
-        """Initialize the Tokenizer with the given input and output column."""
         super().__init__([input_column], output_column)
     
+    # store columns to be removed
     def _set_variables(self, inputs):
-        """Store columns to be removed."""
         self.rem_columns = COLUMNS_REMOVE
     
+    # delete unnecessary data
     def _get_values(self, inputs, df):
-        """Delete unnecessary data."""
-        
         print("Handling missing values")
         # delete columns with no or an unsufficient amount of values
         df.columns = [x.replace("\r", "") for x in df.columns.to_list()]

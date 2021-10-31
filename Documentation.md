@@ -1,19 +1,13 @@
-# Documentation Example
-
-Some introductory sentence(s). Data set and task are relatively fixed, so 
-probably you don't have much to say about them (unless you modifed them).
-If you haven't changed the application much, there's also not much to say about
-that.
-The following structure thus only covers preprocessing, feature extraction,
-dimensionality reduction, classification, and evaluation.
-
 # Documentation on Tweet-Prediction Project
 This file documents the development process of our tweet prediction tool. 
+TODO: Some more introductory stuff
 
 # Goal
 Initial goal: "Predict viral tweets"
+TODO: Elaborate a bit more
 
 ## Evaluation
+TODO: Review and improve
 
 For the evaluation of our classifier, we chose several evaluation metrics in 
 order to evaluate the performance from different perspectives.
@@ -24,8 +18,8 @@ F Beta and Sensitivity.
 
 ### Design Decisions
 
-Which evaluation metrics did you use and why? 
 Which baselines did you use and why?
+TODO: Baselines
 
 #### Accuracy 
 Accuracy is the proportion of true results among the total number of cases 
@@ -61,22 +55,16 @@ consider this as an important metric to evaluate whether we reached our goal.
 
 ### Results
 
-How do the baselines perform with respect to the evaluation metrics?
+TODO: How do the baselines perform with respect to the evaluation metrics?
 
 ### Interpretation
 
-Is there anything we can learn from these results?
+TODO: Is there anything we can learn from these results?
 
 ## Preprocessing
 
-I'm following the "Design Decisions - Results - Interpretation" structure here,
-but you can also just use one subheading per preprocessing step to organize
-things (depending on what you do, that may be better structured).
 
 ### Design Decisions
-
-Which kind of preprocessing steps did you implement? Why are they necessary
-and/or useful down the road?
 
 Before any of the other preprocessing steps, we decided to remove all
 unnecessary data to keep it as simple as possible. We did this by first
@@ -122,53 +110,49 @@ ensure that words with different inflections are cut to the same root form, thou
 they might be incorrect in meaning or spelling. 
 
 Lastly, all of our previously mentioned preprocessing was brought to use in the 
-content analysis of the tweets. There are of course a wide range of approaches,
-methods and degrees of detail in which such an analysis can take place. As the 
-analysis and interpretation of natural language is no easy task, we decided to 
-stay on the broad side and aimed for a rather undetailed and high-level extraction
-of content. In order to get a first contentual interpretation of the tweets, we
-employed the tf-idf method, as this is able to single out characteristic words
-by uprating frequent but unique terms in every tweet. Besides that, the tf-idf
-vectors are a complete representation of the semantic content and can be used 
-for example to compare the similarity of contents (e.g. with the cosine similarity).
-However in line with our high-level aim, we "only" extracted the words with 
-the highest score in order to get a keyword for every tweet. Again, there are 
-multiple ways that those keywords can be used. What we had in mind was to get a 
-brought sense of what the tweets are about, and to some extent we already had 
-this information within our keywords. What we still lacked however was a way of 
-interpreting the keywords, framing them in our context of virality and also more 
-on the practical side, categorizing them in order to achieve a little bit of
-structure and some kind of comparability of very similar words. For computational 
-and practical purposes we decided to focus on a very limited number of keywords,
-which we would broaden to something resembling a topic and use to categorize the
-content of the tweets (one or multiple topics are present or not present in the 
-tweet). Those topics should ideally be relevant to the classification of viral
-and non-viral tweets, which is why we chose the most frequent keywords from
-viral tweets as topic basis. We extended those in a rather simple way by getting 
-all of their synonyms from wordnet (filtering out duplicates). 
-Each tweet was now examined for intersections with the topics, and the presence
-or absence of a topic in a tweet was marked in a new column (i.e. one column per
-topic).
+content analysis of the tweets. There is of course a wide range of approaches,
+methods and degrees of detail in which such an analysis can take place. We 
+decided to extract common keywords from the viral tweets to get some brought 
+content-wise categories as features. Alternatively, methods such as n-grams, 
+word-embeddings and much more could be applied here in order to get an analysis
+of the content. 
+In order to get those content categories, we applied the tf-idf method which is 
+able to single out characteristic words of a tweet by uprating all terms that 
+are frequent but still unique to a degree. However, even though we were only 
+interested in the subset of viral tweets, we still executed the tf-idf scoring 
+on all tweets to ensure that very frequent words within specifically the viral 
+tweets would not cancel each other out. After we had obtained the tf-idf scores, 
+we limited further analysis on the subset of viral tweets. To define a basis for 
+our topics, we got the word with the highest tf-idf score from every tweet and 
+from those selected the ones that occured more then three times. This resulted
+in a considerable amount of frequent words, which we further limited to the 10 
+words with the highest frequency. This then, was the starting point for our 
+topics. Each of them was extended, by accessing the respective synonyms from
+wordnet and adding them to the topic. Initially, we planned on further widening 
+and then summarizing them through wordnet hyernyms, but unfortunately, we 
+did not have enough time for that. After we had succesfully extracted ten 
+supposedly relevant topics from the viral tweets, we compared all tweets with our
+topics and stored their occurence. We are aware, that this step could be 
+considered as feature extraction instead of preprocessing, but decided to do it
+here anyways for simplicity-of-implementation purposes. Because of time issues, 
+there are some other shortcomings that we had to accept. One of them is the 
+high amount of computational resources that this step takes, partly due to an
+inoptimal implementation. Also, initially we planned on using the stemmed tweets 
+as input to have a higher comparability of connected wordforms, but unfortunately
+did not have enough time to figure out how that would work with wordnet.
 
+TODO: If neccessary, add explanation to tweet limit here
 
 ### Results
 
-Maybe show a short example what your preprocessing does.
+TODO: Maybe show a short example what your preprocessing does.
 
-### Interpretation
 
-Probably, no real interpretation possible, so feel free to leave this section
-out.
+
 
 ## Feature Extraction
 
-Again, either structure among decision-result-interpretation or based on
-feature, up to you.
-
-### Design Decisions
-
-Which features did you implement? What's their motivation and how are they
-computed?
+### Design DecisionsS
 
 Since it might very well be possible that English tweets are more likely to
 become viral, due to the amount of people that speak the language, we
@@ -206,34 +190,30 @@ According to https://github.com/cjhutto/vaderSentiment#about-the-scoring :
 - neutral sentiment: (compound score > -0.05) and (compound score < 0.05)
 - negative sentiment: compound score <= -0.05
 We decided against using the compound score as it is and categorizing the data
-instead to ensure a better comparibility.
+instead to ensure a better comparability.
 
 ### Results
 
-Can you say something about how the feature values are distributed? Maybe show
+TODO: Can you say something about how the feature values are distributed? Maybe show
 some plots?
 
 ### Interpretation
 
-Can we already guess which features may be more useful than others?
+TODO: Can we already guess which features may be more useful than others?
 
 ## Dimensionality Reduction
 
-If you didn't use any because you have only few features, just state that here.
-In that case, you can nevertheless apply some dimensionality reduction in order
-to analyze how helpful the individual features are during classification
-
 ### Design Decisions
 
-Which dimensionality reduction technique(s) did you pick and why?
+TODO: Which dimensionality reduction technique(s) did you pick and why?
 
 ### Results
 
-Which features were selected / created? Do you have any scores to report?
+TODO: Which features were selected / created? Do you have any scores to report?
 
 ### Interpretation
 
-Can we somehow make sense of the dimensionality reduction results?
+TODO: Can we somehow make sense of the dimensionality reduction results?
 Which features are the most important ones and why may that be the case?
 
 ## Classification

@@ -65,4 +65,4 @@ class StemmerTest(unittest.TestCase):
     
 
 if __name__ == '__main__':
-    unittest.main()# -*- coding: utf-8 -*-
+    unittest.main()

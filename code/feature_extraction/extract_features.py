@@ -19,18 +19,26 @@ from code.feature_extraction.url_included import UrlIncluded
 from code.feature_extraction.feature_collector import FeatureCollector
 from code.util import COLUMN_TWEET, COLUMN_LABEL, COLUMN_LANGUAGE, COLUMN_URL
 
-
 # setting up CLI
 parser = argparse.ArgumentParser(description = "Feature Extraction")
 parser.add_argument("input_file", help = "path to the input csv file")
 parser.add_argument("output_file", help = "path to the output pickle file")
-parser.add_argument("-e", "--export_file", help = "create a pipeline and export to the given location", default = None)
-parser.add_argument("-i", "--import_file", help = "import an existing pipeline from the given location", default = None)
-parser.add_argument("-c", "--char_length", action = "store_true", help = "compute the number of characters in the tweet")
-parser.add_argument("-t", "--topics", action = "store_true", help = "access topics present in the tweet")
-parser.add_argument("-s", "--sentiment", action = "store_true", help = "analyze the sentiment of the tweet")
-parser.add_argument("-l", "--language", action = "store_true", help = "analyze whether the tweet is in English")
-parser.add_argument("-u", "--url", action = "store_true", help = "analyze whether the tweet contains an URL")
+parser.add_argument("-e", "--export_file",
+                    help = "create a pipeline and export to the given location",
+                    default = None)
+parser.add_argument("-i", "--import_file",
+                    help = "import an existing pipeline from the given location",
+                    default = None)
+parser.add_argument("-c", "--char_length", action = "store_true",
+                    help = "compute the number of characters in the tweet")
+parser.add_argument("-t", "--topics", action = "store_true",
+                    help = "access topics present in the tweet")
+parser.add_argument("-s", "--sentiment", action = "store_true",
+                    help = "analyze the sentiment of the tweet")
+parser.add_argument("-l", "--language", action = "store_true",
+                    help = "analyze whether the tweet is in English")
+parser.add_argument("-u", "--url", action = "store_true",
+                    help = "analyze whether the tweet contains an URL")
 args = parser.parse_args()
 
 # load data
@@ -41,30 +49,30 @@ if args.import_file is not None:
     with open(args.import_file, "rb") as f_in:
         feature_collector = pickle.load(f_in)
 
-else:    # need to create FeatureCollector manually
+# need to create FeatureCollector manually
+else:
 
     # collect all feature extractors
     features = []
+    # character length of original tweet (without any changes)
     if args.char_length:
-        # character length of original tweet (without any changes)
         features.append(CharacterLength(COLUMN_TWEET))
+    # topics of preprocessed tweet
     if args.topics:
-        # topics of preprocessed tweet
         input_cols = list(filter(lambda x: "topic_" in x, list(df.columns)))
         features.append(Topics(input_cols))
+    # sentiment of original tweet (without any changes)
     if args.sentiment:
-        # sentiment of original tweet (without any changes)
         features.append(SentimentAnalyzer(COLUMN_TWEET))
+    # language of original tweet (without any changes)
     if args.language:
-        # language of original tweet (without any changes)
         features.append(EnglishLanguage(COLUMN_LANGUAGE))
+    # urls of original tweet (without any changes)
     if args.url:
-        # urls of original tweet (without any changes)
         features.append(UrlIncluded(COLUMN_URL))
     
     # create overall FeatureCollector
     feature_collector = FeatureCollector(features)
-    
     # fit it on the given data set (assumed to be training data)
     feature_collector.fit(df)
 
