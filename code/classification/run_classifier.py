@@ -83,11 +83,10 @@ else:   # manually set up a classifier
         # gaussian naive bayes classifier
         print("    gaussian naive bayes classifier")
         log_param("classifier", "bayes")
-        log_param("alpha", args.bayes[2])
-        log_param("priors", args.bayes[:2])
-        params = {"classifier": "bayes", "alpha": args.bayes[2], "priors": args.bayes[:2]}
+        log_param("priors", args.bayes)
+        params = {"classifier": "bayes", "priors": args.bayes}
         standardizer = StandardScaler()
-        bayes_classifier = CategoricalNB(alpha=args.bayes[2], class_prior=args.bayes[:2])
+        bayes_classifier = CategoricalNB(class_prior=args.bayes)
         classifier = make_pipeline(standardizer, bayes_classifier)
     
     elif args.knn is not None:
